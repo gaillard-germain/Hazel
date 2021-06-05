@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Hazel</title>
+    <script src="https://kit.fontawesome.com/575962c641.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'home/css/styles.css' %}" rel="stylesheet" />
+  </head>
+  <body>
+    <header id="home-header">
+      <nav class="topnav" id="myTopnav">
+        <h1 id="logo">ALSH Monflanquin</h1>
+        <a href="{% url 'home:index' %}">Accueil</a>
+        <a href="/home/#agenda">Programme</a>
+        <a href="/home/#documents">Documents</a>
+        <a href="/home/#contact">Contact</a>
+        {% if user.is_authenticated %}
+        <a href="">Compte</a>
+        <a href="">Réserver</a>
+        {% else %}
+        <a href="">Se connecter</a>
+        {% endif %}
+        <a href="javascript:void(0);" class="h-icon" onclick="responsiveMenu()"><i class="fas fa-bars fa-2x"></i></a>
+      </nav>
+    </header>
+    {% block content %}{% endblock %}
+    <footer>
+      <a href="#">Mentions légales</a>
+      <a href="/home/#contact">Contact</a>
+      <p>Copyright <i class="far fa-copyright"></i> Germain GAILLARD</p>
+    </footer>
+  </body>
+  <script src="{% static 'home/js/scripts.js' %}"></script>
+</html>
