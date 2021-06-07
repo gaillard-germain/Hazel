@@ -2,8 +2,11 @@
 
 :root {
   --light-blue: #79a7c5;
+  --dark-blue: #285a7b;
   --red: #b6491b;
   --green: #a3c46d;
+  --dark-grey: #414141;
+  --warning: #e26908;
 }
 
 *,
@@ -137,17 +140,78 @@ header {
   margin-bottom: 2em;
 }
 
-#intro {
+.intro {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;
-  /* background-origin: content-box; */
-  /* width: 100%; */
   height: 50em;
   margin: 0;
   text-align: center;
   padding-top: 12em;
   color: white;
+}
+
+.form-box {
+  width: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  margin: 0 auto;
+  padding: 0.5em;
+  border: 1px solid grey;
+  border-radius: 10px;
+  color: var(--dark-grey);
+}
+
+.form-label {
+  padding: 1em 0 0.5em 0;
+  font-weight: bold;
+}
+
+.form-field input{
+  background-color: white;
+  border: 1px solid grey;
+  border-radius: 10px;
+  line-height: 2em;
+  padding: : 0 0 1em 0;
+}
+
+.form-button {
+  background-color: transparent;
+  border: 2px solid var(--dark-grey);
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  margin: 1.5em 0 0.5em 0;
+  padding: 0.5em;
+  color: inherit;
+  font-weight: bold;
+}
+
+.form-button:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 2px solid var(--light-blue);
+  color: var(--light-blue);
+}
+
+.form-button:active {
+  background-color: white;
+  border: 2px solid var(--dark-blue);
+  color: var(--dark-blue);
+}
+
+.form-box a {
+  text-decoration: underline;
+  font-weight: bolder;
+  color: inherit;
+}
+
+.form-box a:hover {
+  color: var(--light-blue);
+}
+
+.text-warning {
+  font-size: 0.8em;
+  font-weight: bold;
+  color: var(--red);
 }
 
 section {
@@ -173,14 +237,17 @@ footer {
   text-align: center;
   background-color: lightgrey;
   padding: 1em;
+  border-top: 2px solid grey;
+  color: white;
 }
 
 footer a {
   text-decoration: none;
-  color: black;
+  color: grey;
   padding: 1em;
 }
 
+/* Responsive */
 
 @media screen and (max-width: 900px) {
   .topnav a, .dropdown .dropbtn {
@@ -190,7 +257,7 @@ footer a {
     float: right;
     display: block;
   }
-  #intro {
+  .intro {
     height: 40em;
   }
 }
@@ -218,8 +285,19 @@ footer a {
   }
 }
 
-@media screen and (max-width: 450px) {
-  #intro {
+@media screen and (max-width: 500px) {
+  header {
+    top: 0;
+  }
+  .intro {
     height: 30em;
+    margin-top: 5.7em;
+    padding-top: 1.5em;
+  }
+  .form-box {
+    width: 100%;
+    border-radius: 0;
+    border-right: none;
+    border-left: none;
   }
 }

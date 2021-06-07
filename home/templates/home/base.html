@@ -19,10 +19,9 @@
         <a href="/home/#documents">Documents</a>
         <a href="/home/#contact">Contact</a>
         {% if user.is_authenticated %}
-        <a href="">Compte</a>
-        <a href="">Réserver</a>
+        <a href="/registration/accounts/logout">Déconnexion</a>
         {% else %}
-        <a href="">Se connecter</a>
+        <a href="/registration/accounts/login">Se connecter</a>
         {% endif %}
         <a href="javascript:void(0);" class="h-icon" onclick="responsiveMenu()"><i class="fas fa-bars fa-2x"></i></a>
       </nav>

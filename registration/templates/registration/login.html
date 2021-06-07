@@ -1,0 +1,25 @@
+{% extends 'home/base.html' %}
+{% load static %}
+  {% block content %}
+  <div class="intro" style="background-image: url({% static 'registration/img/lobby_intro.jpg' %})">
+    <div class="form-box">
+      <h3>Déja inscris ? Connectez-vous.</h3>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-label">
+          {{ field.label_tag }}
+        </div>
+        <div class="form-field">
+          {{ field }}
+        </div>
+        {% endfor %}
+        <button class="form-button" type="submit">Se Connecter</button>
+        {% if form.errors %}
+          <p class="text-warning">Nom d'utilisateur ou mot de passe invalide. Essayez de nouveau.</p>
+        {% endif %}
+      </form>
+      <h3>Ou <a href="">créez un compte.</a></h3>
+    </div>
+  </div>
+  {% endblock %}
