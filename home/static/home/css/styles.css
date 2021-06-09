@@ -4,7 +4,7 @@
   --light-blue: #79a7c5;
   --dark-blue: #285a7b;
   --red: #b6491b;
-  --green: #a3c46d;
+  --green: #c6e293;
   --dark-grey: #414141;
   --warning: #e26908;
 }
@@ -211,6 +211,7 @@ header {
 }
 
 .form-button {
+  cursor: pointer;
   background-color: transparent;
   border: 2px solid var(--dark-grey);
   border-radius: 10px;
@@ -220,6 +221,7 @@ header {
   padding: 0.5em;
   color: inherit;
   font-weight: bold;
+  font-size: 1em;
 }
 
 .form-button:hover {
@@ -267,6 +269,25 @@ section {
   text-decoration: none;
   padding: 1em;
   color: black;
+}
+
+.banner-img {
+  width: 100%;
+}
+
+.info-box {
+  padding: 1em;
+  background-color: var(--green);
+}
+
+.info-box h2 {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+
+.info-box table td {
+  text-align: left;
+  padding: 0.5em
 }
 
 footer {
@@ -363,6 +384,9 @@ footer a {
   }
   .top-offset {
     margin-top: 5.7em;
+  }
+  .banner-img {
+    margin-top: 7em;
   }
 
 }

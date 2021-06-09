@@ -1,15 +1,21 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
+from django.http import Http404
 from .forms import SignUpForm, FamilyForm, AddressForm
+from .models import Family, Address, Child
 
 
 def logout_request(request):
+    """Logout view"""
+
     logout(request)
     return render(request, 'registration/logout.html')
 
 
 def signup(request):
+    """Signup view"""
+
     if request.method == 'POST':
         user_form = SignUpForm(request.POST)
         family_form = FamilyForm(request.POST)
@@ -48,3 +54,22 @@ def signup(request):
     }
 
     return render(request, 'registration/signup.html', context)
+
+
+def manage_account(request):
+    """User's account informations view"""
+
+    if request.user.is_authenticated:
+        family = Family.objects.get(user=request.user.id)
+        children = Child.objects.filter(family=family.id)
+        context = {
+            'family': family,
+            'children': children
+        }
+        return render(request, 'registration/myaccount.html', context)
+    else:
+        raise Http404()
+
+
+def register_new_child(request):
+    return render(request, 'registration/regchild.html')

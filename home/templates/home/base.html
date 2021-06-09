@@ -24,12 +24,22 @@
             <span>{{ user.username }}</span>
           </button>
           <div id="account" class="dropdown-content">
-            <a href="#">Mon compte</a>
+            <a href="{% url 'registration:myaccount' %}">Mon compte</a>
             <a href="/registration/accounts/logout">Déconnexion</a>
           </div>
         </div>
         {% else %}
-        <a href="/registration/accounts/login">Se connecter</a>
+        <div class="dropdown">
+          <button onclick="dropDown()" class="dropbtn">
+            <i class="far fa-user-circle fa-3x"></i>
+            <span>Connexion</span>
+          </button>
+          <div id="account" class="dropdown-content">
+            <a href="/registration/accounts/login">Se connecter</a>
+            <a href="{% url 'registration:signup' %}">Créer un compte</a>
+          </div>
+        </div>
+
         {% endif %}
         <a href="javascript:void(0);" class="h-icon" onclick="responsiveMenu()"><i class="fas fa-bars fa-2x"></i></a>
       </nav>
