@@ -11,10 +11,12 @@ class Address(models.Model):
     number = models.CharField(max_length=10, blank=True, null=True)
     road = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
-    zip_code = models.IntegerField()
+    zip_code = models.CharField(max_length=5)
 
     def __str__(self):
-        return self.number, self.road, self.zip_code, self.city
+        return '{}, {} {} {}'.format(
+            self.number, self.road, self.zip_code, self.city
+        )
 
 
 class Family(models.Model):
@@ -47,7 +49,7 @@ class LegalGuardian(models.Model):
     email = models.EmailField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return self.firstname, self.lastname
+        return '{} {}'.format(self.firstname, self.lastname)
 
 
 class AuthorizedPerson(models.Model):
@@ -57,7 +59,7 @@ class AuthorizedPerson(models.Model):
     relationship = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return self.firstname, self.lastname
+        return '{} {}'.format(self.firstname, self.lastname)
 
 
 class Doctor(models.Model):
@@ -66,7 +68,7 @@ class Doctor(models.Model):
     phone = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
-        return 'Dr', self.lastname
+        return 'Dr. {}'.format(self.lastname)
 
 
 class Child(models.Model):
@@ -88,4 +90,4 @@ class Child(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.firstname, self.lastname
+        return '{} {}'.format(self.firstname, self.lastname)

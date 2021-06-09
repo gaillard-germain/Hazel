@@ -19,7 +19,7 @@
           <p class="text-warning">Nom d'utilisateur ou mot de passe invalide. Essayez de nouveau.</p>
         {% endif %}
       </form>
-      <h3>Ou <a href="">créez un compte.</a></h3>
+      <h3>Ou <a href="{% url 'registration:signup' %}">créez un compte.</a></h3>
     </div>
   </div>
   {% endblock %}

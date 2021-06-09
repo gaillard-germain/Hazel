@@ -13,13 +13,21 @@
   <body>
     <header id="home-header">
       <nav class="topnav" id="myTopnav">
-        <h1 id="logo">ALSH Monflanquin</h1>
-        <a href="{% url 'home:index' %}">Accueil</a>
-        <a href="/home/#agenda">Programme</a>
-        <a href="/home/#documents">Documents</a>
-        <a href="/home/#contact">Contact</a>
+        <a id="logo" href="{% url 'home:index' %}">ALSH Monflanquin</a>
+        <a href="/#agenda">Programme</a>
+        <a href="/#documents">Documents</a>
+        <a href="/#contact">Contact</a>
         {% if user.is_authenticated %}
-        <a href="/registration/accounts/logout">Déconnexion</a>
+        <div class="dropdown">
+          <button onclick="dropDown()" class="dropbtn">
+            <i class="far fa-user-circle fa-3x"></i>
+            <span>{{ user.username }}</span>
+          </button>
+          <div id="account" class="dropdown-content">
+            <a href="#">Mon compte</a>
+            <a href="/registration/accounts/logout">Déconnexion</a>
+          </div>
+        </div>
         {% else %}
         <a href="/registration/accounts/login">Se connecter</a>
         {% endif %}

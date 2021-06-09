@@ -1,0 +1,49 @@
+{% extends 'home/base.html' %}
+{% load static %}
+  {% block content %}
+  <div class="bg-fixed">
+    <div class="form-box top-offset">
+      <form method="post">
+        {% csrf_token %}
+        <h2>Informations utilisateur</h2>
+        {% for field in user_form %}
+          <div class="form-label">
+            {{ field.label_tag }}
+          </div>
+          <div class="form-field">
+            {{ field }}
+          </div>
+          {% for error in field.errors %}
+            <p class="text-warning">{{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+        <hr class="separator">
+        <h2>Informations famille</h2>
+        {% for field in family_form %}
+          <div class="form-label">
+            {{ field.label_tag }}
+          </div>
+          <div class="form-field">
+            {{ field }}
+          </div>
+          {% for error in field.errors %}
+            <p class="text-warning">{{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+        <h3>Adresse</h3>
+        {% for field in address_form %}
+          <div class="form-label">
+            {{ field.label_tag }}
+          </div>
+          <div class="form-field">
+            {{ field }}
+          </div>
+          {% for error in field.errors %}
+            <p class="text-warning">{{ error }}</p>
+          {% endfor %}
+        {% endfor %}
+        <button class="form-button" type="submit">S'inscrire</button>
+      </form>
+    </div>
+  </div>
+  {% endblock %}
