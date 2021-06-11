@@ -1,5 +1,19 @@
 {% extends 'home/base.html' %}
 {% load static %}
   {% block content %}
-  
+  <div class="bg-fixed">
+    <h1 class="section-title top-offset">Inscrire un enfant</h1>
+    <div class="form-box">
+      <form method="post">
+        {% csrf_token %}
+        <h2>Enfant</h2>
+        {% include 'registration/form_snippet.html' with form=child_form %}
+        <hr class="separator">
+        <h2>Responsables légaux</h2>
+        <h3>Mère / responsable légal 1</h3>
+        {% include 'registration/form_snippet.html' with form=lg1_form %}
+        <button class="form-button" type="submit">Inscrire</button>
+      </form>
+    </div>
+  </div>
   {% endblock %}

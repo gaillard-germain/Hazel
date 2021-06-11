@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.http import Http404
-from .forms import SignUpForm, FamilyForm, AddressForm
-from .models import Family, Address, Child
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from .forms import SignUpForm, FamilyForm, ChildForm, LegalGuardianForm
+from .models import Family, Child
 
 
 def logout_request(request):
@@ -19,22 +20,17 @@ def signup(request):
     if request.method == 'POST':
         user_form = SignUpForm(request.POST)
         family_form = FamilyForm(request.POST)
-        address_form = AddressForm(request.POST)
 
-        if (user_form.is_valid() and family_form.is_valid()
-                and address_form.is_valid()):
+        if user_form.is_valid() and family_form.is_valid():
             user = user_form.save()
-            user.save()
-
-            address = address_form.save()
-            address.save()
 
             group, created = Group.objects.get_or_create(name='parents')
             user.groups.add(group)
 
             family = family_form.save(commit=False)
+            family.name = family_form.cleaned_data.get('name').upper()
+            family.address = family_form.cleaned_data.get('address').upper()
             family.user = user
-            family.address = address
             family.save()
 
             raw_password = user_form.cleaned_data.get('password1')
@@ -45,12 +41,10 @@ def signup(request):
     else:
         user_form = SignUpForm()
         family_form = FamilyForm()
-        address_form = AddressForm()
 
     context = {
         'user_form': user_form,
         'family_form': family_form,
-        'address_form': address_form
     }
 
     return render(request, 'registration/signup.html', context)
@@ -72,4 +66,40 @@ def manage_account(request):
 
 
 def register_new_child(request):
-    return render(request, 'registration/regchild.html')
+
+    if request.method == 'POST':
+        child_form = ChildForm(request.POST)
+        lg1_form = LegalGuardianForm(request.POST)
+
+        if child_form.is_valid():
+            family = Family.objects.get(user=request.user.id)
+
+            lg1 = lg1_form.save(commit=False)
+            lg1.firstname = lg1_form.cleaned_data.get('firstname').title()
+            lg1.lastname = lg1_form.cleaned_data.get('lastname').upper()
+            lg1.address = lg1_form.cleaned_data.get('address').upper()
+            lg1.save()
+
+            child = child_form.save(commit=False)
+            child.family = family
+            child.firstname = child_form.cleaned_data.get('firstname').title()
+            child.lastname = child_form.cleaned_data.get('lastname').upper()
+            child.legal_guardian_1 = lg1
+            child.save()
+
+            return redirect('registration:myaccount')
+
+    else:
+        family = Family.objects.get(user=request.user.id)
+
+        child_form = ChildForm()
+        lg1_form = LegalGuardianForm()
+
+        lg1_form['address'].initial = family.address
+
+    context = {
+        'child_form': child_form,
+        'lg1_form': lg1_form,
+    }
+
+    return render(request, 'registration/regchild.html', context)

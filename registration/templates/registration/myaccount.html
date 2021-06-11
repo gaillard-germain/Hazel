@@ -35,11 +35,13 @@
         </tr>
       </table>
       <h2>Enfants inscris</h2>
-      <ul>
-        {% for child in children %}
-        <li>{{ child.firstname }} {{ child.lastname }}</li>
-        {% endfor %}
-      </ul>
+      <div class="sub-box">
+        <ul>
+          {% for child in children %}
+          <li>{{ child.firstname }} {{ child.lastname }}</li>
+          {% endfor %}
+        </ul>
+      </div>
       <a class="form-button" href="{% url 'registration:regchild' %}"><i class="fas fa-plus"></i> Inscrire un enfant</a>
     </div>
   </section>

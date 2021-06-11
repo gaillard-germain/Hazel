@@ -2,7 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.conf import settings
 from django import forms
 
-from .models import User, Family, Address
+from .models import User, Family, Adult, Child
 
 
 class SignUpForm(UserCreationForm):
@@ -26,34 +26,80 @@ class FamilyForm(forms.ModelForm):
 
     class Meta:
         model = Family
-        fields = ('name', 'phone',)
+        fields = ('name', 'phone', 'address')
         labels = {
             'name': ('Nom de la famille'),
-            'phone': ('Téléphone de la famille')
+            'phone': ('Téléphone de la famille'),
+            'address': ('Adresse')
         }
 
 
-class AddressForm(forms.ModelForm):
+class ChildForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['road'].widget.attrs.update({
+        self.fields['birth_date'].widget.input_type = 'date'
+        self.fields['firstname'].widget.attrs.update({
             'style': 'text-transform:uppercase'
         })
-        self.fields['city'].widget.attrs.update({
+        self.fields['lastname'].widget.attrs.update({
             'style': 'text-transform:uppercase'
-        })
-        self.fields['zip_code'].widget.attrs.update({
-            'maxlength': '5',
-            'pattern': '[0-9]+'
         })
 
     class Meta:
-        model = Address
-        fields = ('number', 'road', 'city', 'zip_code',)
+        model = Child
+        fields = (
+            'firstname',
+            'lastname',
+            'birth_date',
+            'grade',
+            'school',
+            'info'
+        )
         labels = {
-            'number': ('Numéro'),
-            'road': ('Voie'),
-            'city': ('Ville'),
-            'zip_code': ('Code Postal')
+            'firstname': ('Prénom'),
+            'lastname': ('Nom'),
+            'birth_date': ('Date de naissance'),
+            'grade': ('Classe'),
+            'school': ('Ecole'),
+            'info': ('Informations')
+        }
+        help_texts = {
+            'info': (
+                "Allergies, asthme, autre... \
+                En cas de PAI: merci de bien vouloir nous faire parvenir \
+                un exemplaire. \
+                En cas de traitement médical temporaire: merci de bien \
+                vouloir le signaler au personnel de l'Accueil de Loisirs."
+            )
+        }
+
+
+class LegalGuardianForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['firstname'].widget.attrs.update({
+            'style': 'text-transform:uppercase'
+        })
+        self.fields['lastname'].widget.attrs.update({
+            'style': 'text-transform:uppercase'
+        })
+
+    class Meta:
+        model = Adult
+        fields = (
+            'firstname', 'lastname', 'family_situation', 'occupation',
+            'job_phone', 'cell_phone', 'email', 'address'
+        )
+        labels = {
+            'firstname': ('Prénom'),
+            'lastname': ('Nom'),
+            'family_situation': ('Situation familiale'),
+            'occupation': ('Profession'),
+            'job_phone': ('Téléphone travail'),
+            'cell_phone': ('Téléphone portable'),
+            'email': ('E-mail'),
+            'address': ('Adresse')
+
         }

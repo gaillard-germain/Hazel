@@ -166,6 +166,8 @@ header {
 
 .bg-fixed {
   padding-top: 2em;
+  text-align: center;
+  color: white;
 }
 
 .bg-fixed::before {
@@ -184,7 +186,7 @@ header {
 
 .form-box {
   width: 50%;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.7);
   margin: 2em auto;
   padding: 0.5em;
   border: 1px solid grey;
@@ -194,12 +196,17 @@ header {
 }
 
 .top-offset {
-  margin-top: 12em;
+  margin-top: 5em;
 }
 
 .form-label {
   padding: 1em 0 0.5em 0;
   font-weight: bold;
+}
+
+.form-help {
+  font-size: 0.7em;
+  padding: 0 4rem;
 }
 
 .form-field input{
@@ -288,6 +295,10 @@ section {
 .info-box table td {
   text-align: left;
   padding: 0.5em
+}
+
+.sub-box {
+  text-align: left;
 }
 
 footer {
@@ -383,7 +394,7 @@ footer a {
     border-left: none;
   }
   .top-offset {
-    margin-top: 5.7em;
+    margin-top: 3em;
   }
   .banner-img {
     margin-top: 7em;
