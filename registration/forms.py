@@ -20,16 +20,13 @@ class FamilyForm(forms.ModelForm):
             'maxlength': '10',
             'pattern': '[0-9]+'
         })
-        self.fields['name'].widget.attrs.update({
-            'style': 'text-transform:uppercase'
-        })
 
     class Meta:
         model = Family
         fields = ('name', 'phone', 'address')
         labels = {
-            'name': ('Nom de la famille'),
-            'phone': ('Téléphone de la famille'),
+            'name': ("Nom d'usage"),
+            'phone': ('Téléphone (domicile)'),
             'address': ('Adresse')
         }
 
@@ -39,12 +36,6 @@ class ChildForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['birth_date'].widget.input_type = 'date'
-        self.fields['firstname'].widget.attrs.update({
-            'style': 'text-transform:uppercase'
-        })
-        self.fields['lastname'].widget.attrs.update({
-            'style': 'text-transform:uppercase'
-        })
 
     class Meta:
         model = Child
@@ -79,11 +70,13 @@ class LegalGuardianForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['firstname'].widget.attrs.update({
-            'style': 'text-transform:uppercase'
+        self.fields['job_phone'].widget.attrs.update({
+            'maxlength': '10',
+            'pattern': '[0-9]+'
         })
-        self.fields['lastname'].widget.attrs.update({
-            'style': 'text-transform:uppercase'
+        self.fields['cell_phone'].widget.attrs.update({
+            'maxlength': '10',
+            'pattern': '[0-9]+'
         })
 
     class Meta:
@@ -103,3 +96,72 @@ class LegalGuardianForm(forms.ModelForm):
             'address': ('Adresse')
 
         }
+
+
+class AuthorizedPersonForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['cell_phone'].widget.attrs.update({
+            'maxlength': '10',
+            'pattern': '[0-9]+'
+        })
+
+    class Meta:
+        model = Adult
+        fields = (
+            'firstname', 'lastname', 'cell_phone', 'relationship'
+        )
+        labels = {
+            'firstname': ('Prénom'),
+            'lastname': ('Nom'),
+            'cell_phone': ('Téléphone portable'),
+            'relationship': ('Lien')
+        }
+
+
+class DoctorForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['job_phone'].widget.attrs.update({
+            'maxlength': '10',
+            'pattern': '[0-9]+'
+        })
+
+    class Meta:
+        model = Adult
+        fields = (
+            'lastname', 'job_phone', 'address'
+        )
+        labels = {
+            'lastname': ('Nom'),
+            'job_phone': ('Téléphone'),
+            'address': ('Adresse')
+        }
+
+class ParentalAuthorizationForm(forms.Form):
+    YN_CHOICES = [(True, 'Oui'), (False, 'Non')]
+
+    go_alone = forms.ChoiceField(
+        label="Votre enfant peut partir seul?",
+        choices=YN_CHOICES,
+        widget=forms.RadioSelect()
+    )
+    go_alone.widget.attrs.update({})
+
+    activity = forms.ChoiceField(
+        label="J'autorise mon enfant à participer à l'ensemble des activité",
+        choices=YN_CHOICES,
+        widget=forms.RadioSelect()
+    )
+    activity.widget.attrs.update({})
+
+    image_rights = forms.ChoiceField(
+        label="J'autorise mon enfant à figurer sur l'ensemble des supports \
+        de communication",
+        help_text='(photos, vidéos, articles...)',
+        choices=YN_CHOICES,
+        widget=forms.RadioSelect()
+    )
+    image_rights.widget.attrs.update({})

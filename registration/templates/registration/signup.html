@@ -11,6 +11,10 @@
         <hr class="separator">
         <h2>Informations famille</h2>
         {% include 'registration/form_snippet.html' with form=family_form%}
+        <hr class="separator">
+        <h2>Médecin de famille</h2>
+        {% include 'registration/form_snippet.html' with form=doctor_form%}
+        <hr class="separator">
         <button class="form-button" type="submit">S'inscrire</button>
       </form>
     </div>

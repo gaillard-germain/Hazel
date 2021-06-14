@@ -3,8 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.http import Http404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .forms import SignUpForm, FamilyForm, ChildForm, LegalGuardianForm
-from .models import Family, Child
+from .forms import (SignUpForm, FamilyForm, ChildForm, LegalGuardianForm,
+    AuthorizedPersonForm, ParentalAuthorizationForm, DoctorForm)
+from .models import Family, Child, Adult
 
 
 def logout_request(request):
@@ -17,10 +18,11 @@ def logout_request(request):
 def signup(request):
     """Signup view"""
 
-    if request.method == 'POST':
-        user_form = SignUpForm(request.POST)
-        family_form = FamilyForm(request.POST)
+    user_form = SignUpForm(request.POST or None)
+    family_form = FamilyForm(request.POST or None)
+    doctor_form = DoctorForm(request.POST or None)
 
+    if request.method == 'POST':
         if user_form.is_valid() and family_form.is_valid():
             user = user_form.save()
 
@@ -31,6 +33,7 @@ def signup(request):
             family.name = family_form.cleaned_data.get('name').upper()
             family.address = family_form.cleaned_data.get('address').upper()
             family.user = user
+            family.doctor = Adult.create_doc(doctor_form)
             family.save()
 
             raw_password = user_form.cleaned_data.get('password1')
@@ -38,13 +41,11 @@ def signup(request):
             login(request, user)
 
             return redirect('home:index')
-    else:
-        user_form = SignUpForm()
-        family_form = FamilyForm()
 
     context = {
         'user_form': user_form,
         'family_form': family_form,
+        'doctor_form': doctor_form
     }
 
     return render(request, 'registration/signup.html', context)
@@ -64,42 +65,93 @@ def manage_account(request):
     else:
         raise Http404()
 
+# class ChildWizard(SessionWizardView):
+#     template_name = 'registration/regchild.html'
+#     form_list = [ChildForm, LegalGuardianForm]
+#
+#     def done(self, form_list, **kwargs):
+#         return render(self.request, 'done.html', {
+#             'form_data': [form.cleaned_data for form in form_list],
+#         })
 
-def register_new_child(request):
 
+def regchild_step1(request):
+    """ first step form to register a child """
+
+    initial = {'child': request.session.get('child', None)}
+    form = ChildForm(request.POST or None, initial=initial)
     if request.method == 'POST':
-        child_form = ChildForm(request.POST)
-        lg1_form = LegalGuardianForm(request.POST)
+        if form.is_valid():
+            request.session['child'] = form.cleaned_data
+            return redirect('registration:regchild_step2')
 
-        if child_form.is_valid():
+    context  = {
+        'form': form,
+        'h2': 'Enfant',
+        'step': 1
+    }
+
+    return render(request, 'registration/regchild.html', context)
+
+
+def regchild_step2(request):
+    """ second step form to register a child """
+
+    form = LegalGuardianForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            request.session['lg1'] = form.cleaned_data
+            return redirect('registration:regchild_step3')
+
+    context  = {
+        'form': form,
+        'h2': 'Mère / Responsable Légal 1',
+        'step': 2
+    }
+
+    return render(request, 'registration/regchild.html', context)
+
+
+def regchild_step3(request):
+    """ third step form to register a child """
+
+    form = LegalGuardianForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            request.session['lg2'] = form.cleaned_data
+            return redirect('registration:regchild_step4')
+
+    context  = {
+        'form': form,
+        'h2': "Père / Responsable légal 2",
+        'step': 3
+    }
+
+    return render(request, 'registration/regchild.html', context)
+
+
+def regchild_step4(request):
+    """ fourth step form to register a child """
+
+    form = ParentalAuthorizationForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
             family = Family.objects.get(user=request.user.id)
-
-            lg1 = lg1_form.save(commit=False)
-            lg1.firstname = lg1_form.cleaned_data.get('firstname').title()
-            lg1.lastname = lg1_form.cleaned_data.get('lastname').upper()
-            lg1.address = lg1_form.cleaned_data.get('address').upper()
-            lg1.save()
-
-            child = child_form.save(commit=False)
-            child.family = family
-            child.firstname = child_form.cleaned_data.get('firstname').title()
-            child.lastname = child_form.cleaned_data.get('lastname').upper()
+            child = Child.create_child(family, request.session['child'])
+            lg1 = Adult.create_lg(request.session['lg1'])
+            lg2 = Adult.create_lg(request.session['lg2'])
             child.legal_guardian_1 = lg1
+            child.legal_guardian_2 = lg2
+            child.go_alone = form.cleaned_data['go_alone']
+            child.activity = form.cleaned_data['activity']
+            child.image_rights = form.cleaned_data['image_rights']
             child.save()
-
             return redirect('registration:myaccount')
 
-    else:
-        family = Family.objects.get(user=request.user.id)
-
-        child_form = ChildForm()
-        lg1_form = LegalGuardianForm()
-
-        lg1_form['address'].initial = family.address
-
-    context = {
-        'child_form': child_form,
-        'lg1_form': lg1_form,
+    context  = {
+        'form': form,
+        'h2': "Autorisations parentales",
+        'step': 4
     }
 
     return render(request, 'registration/regchild.html', context)

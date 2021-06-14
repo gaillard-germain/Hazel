@@ -9,6 +9,7 @@
     <h1 class="section-title">Mon compte</h1>
     <hr class="separator">
     <div class="info-box">
+      <h2>Utilisateur</h2>
       <table>
         <tr>
           <td>Nom d'utilisateur:</td>
@@ -42,7 +43,16 @@
           {% endfor %}
         </ul>
       </div>
-      <a class="form-button" href="{% url 'registration:regchild' %}"><i class="fas fa-plus"></i> Inscrire un enfant</a>
+      <a class="form-button" href="{% url 'registration:regchild_step1' %}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
+    <h2>Autre personnes autorisées à récupérer les enfants</h2>
+    <div class="sub-box">
+      <ul>
+        {% for person in authorized_person %}
+        <li>{{ person }}</li>
+        {% endfor %}
+      </ul>
     </div>
+    <a class="form-button" href=""><i class="fas fa-plus"></i> Ajouter une personne</a>
+  </div>
   </section>
   {% endblock %}

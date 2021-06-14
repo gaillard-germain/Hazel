@@ -16,6 +16,7 @@ window.onclick = function(event) {
   }
 }
 
+
 function responsiveMenu() {
   var x = document.getElementById("myTopnav");
   if (x.className === "topnav") {

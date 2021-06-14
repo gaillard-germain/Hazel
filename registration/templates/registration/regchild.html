@@ -2,17 +2,22 @@
 {% load static %}
   {% block content %}
   <div class="bg-fixed">
-    <h1 class="section-title top-offset">Inscrire un enfant</h1>
+    <h1 class="section-title top-offset">INSCRIRE UN ENFANT</h1>
+    <h1 class="section-title">-Etape {{ step }}-</h1>
     <div class="form-box">
       <form method="post">
         {% csrf_token %}
-        <h2>Enfant</h2>
-        {% include 'registration/form_snippet.html' with form=child_form %}
+        <h2>{{ h2 }}</h2>
+        {% include 'registration/form_snippet.html' with form=form %}
         <hr class="separator">
-        <h2>Responsables légaux</h2>
-        <h3>Mère / responsable légal 1</h3>
-        {% include 'registration/form_snippet.html' with form=lg1_form %}
-        <button class="form-button" type="submit">Inscrire</button>
+        {% if step > 1 %}
+        <button class="form-button" type="button" onClick="history.back()"><i class="fas fa-arrow-left"></i> Précédent</button>
+        {% endif %}
+        {% if step > 0 and step < 4 %}
+        <button class="form-button" type="submit">Suivant <i class="fas fa-arrow-right"></i></button>
+        {% else %}
+        <button class="form-button" type="submit">Enregistrer</button>
+        {% endif %}
       </form>
     </div>
   </div>
