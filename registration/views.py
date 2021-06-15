@@ -23,7 +23,8 @@ def signup(request):
     doctor_form = DoctorForm(request.POST or None)
 
     if request.method == 'POST':
-        if user_form.is_valid() and family_form.is_valid():
+        if (user_form.is_valid() and family_form.is_valid()
+            and doctor_form.is_valid()):
             user = user_form.save()
 
             group, created = Group.objects.get_or_create(name='parents')
@@ -57,9 +58,12 @@ def manage_account(request):
     if request.user.is_authenticated:
         family = Family.objects.get(user=request.user.id)
         children = Child.objects.filter(family=family.id)
+        authorized_persons = Adult.objects.filter(family_friends=family)
+
         context = {
             'family': family,
-            'children': children
+            'children': children,
+            'authorized_persons': authorized_persons
         }
         return render(request, 'registration/myaccount.html', context)
     else:
@@ -155,3 +159,19 @@ def regchild_step4(request):
     }
 
     return render(request, 'registration/regchild.html', context)
+
+
+def regperson(request):
+
+    form = AuthorizedPersonForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            family = Family.objects.get(user=request.user.id)
+            person = Adult.create_person(form)
+            family.authorized_person.add(person)
+
+            return redirect('registration:myaccount')
+
+    context = {'form': form}
+
+    return render(request, 'registration/regperson.html', context)

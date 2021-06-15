@@ -14,4 +14,5 @@ urlpatterns = [
     path('regchild_step2', views.regchild_step2, name='regchild_step2'),
     path('regchild_step3', views.regchild_step3, name='regchild_step3'),
     path('regchild_step4', views.regchild_step4, name='regchild_step4'),
+    path('regperson', views.regperson, name='regperson'),
 ]

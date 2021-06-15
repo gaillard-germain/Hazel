@@ -20,14 +20,29 @@ class FamilyForm(forms.ModelForm):
             'maxlength': '10',
             'pattern': '[0-9]+'
         })
+        self.fields['plan'] = forms.ChoiceField(
+            label="Régime d'appartenance",
+            choices=[('CAF', 'CAF'), ('MSA', 'MSA'), ('Autres', 'Autres')],
+            widget=forms.RadioSelect(attrs={'class': 'radio-select'})
+        )
 
     class Meta:
         model = Family
-        fields = ('name', 'phone', 'address')
+        fields = ('name', 'phone', 'address', 'plan', 'beneficiary_name',
+            'beneficiary_number', 'insurance_name', 'insurance_number')
         labels = {
             'name': ("Nom d'usage"),
             'phone': ('Téléphone (domicile)'),
-            'address': ('Adresse')
+            'address': ('Adresse'),
+            'plan': ("Régime d'appartenance"),
+            'beneficiary_name': ("Nom Allocataire"),
+            'beneficiary_number': ("Numéro Allocataire"),
+            'insurance_name': ('Assurance'),
+            'insurance_number': ('Numéro de police')
+        }
+        help_texts = {
+            'plan': ("Attestation de Quotient Familial à fournir et/ou Bon \
+                      Aide Aux Vacances.")
         }
 
 

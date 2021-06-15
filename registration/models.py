@@ -43,13 +43,24 @@ class Adult(models.Model):
     def create_doc(cls, form):
         doctor, created = cls.objects.get_or_create(
             firstname="Dr",
-            lastname=form.cleaned_data['lastname'].upper(),
-            job_phone=form.cleaned_data['job_phone'],
-            address=form.cleaned_data['address'].upper()
+            lastname=form.cleaned_data.get('lastname').upper(),
+            job_phone=form.cleaned_data.get('job_phone'),
+            address=form.cleaned_data.get('address').upper()
         )
 
         return doctor
 
+    @classmethod
+    def create_person(cls, form):
+        person, created = cls.objects.get_or_create(
+            firstname=form.cleaned_data.get('firstname').title(),
+            lastname=form.cleaned_data.get('lastname').upper(),
+            cell_phone=form.cleaned_data.get('cell_phone'),
+            relationship=form.cleaned_data.get('relationship'),
+            address="NON REQUIS"
+        )
+
+        return person
 
 class Family(models.Model):
     user = models.ForeignKey(
@@ -60,11 +71,16 @@ class Family(models.Model):
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=10)
     authorized_person = models.ManyToManyField(
-        Adult, related_name='authorized_person', blank=True
+        Adult, related_name='family_friends', blank=True
     )
     doctor = models.ForeignKey(
-        Adult, related_name='doctor', on_delete=models.SET_NULL, null=True
+        Adult, related_name='family_doctor', on_delete=models.SET_NULL, null=True
     )
+    plan = models.CharField(max_length=50)
+    beneficiary_name = models.CharField(max_length=50, null=True)
+    beneficiary_number = models.CharField(max_length=50, null=True)
+    insurance_name = models.CharField(max_length=50)
+    insurance_number = models.CharField(max_length=50)
 
     def __str__(self):
         return self.name
@@ -82,11 +98,11 @@ class Child(models.Model):
     activity = models.BooleanField(default=True)
     image_rights = models.BooleanField(default=True)
     legal_guardian_1 = models.ForeignKey(
-        Adult, related_name='legal_guardian_1',
+        Adult, related_name='child_lg1',
         on_delete=models.SET_NULL, null=True
     )
     legal_guardian_2 = models.ForeignKey(
-        Adult, related_name='legal_guardian_2',
+        Adult, related_name='child_lg2',
         on_delete=models.SET_NULL, null=True
     )
 

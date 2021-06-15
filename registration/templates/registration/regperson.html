@@ -1,0 +1,16 @@
+{% extends 'home/base.html' %}
+{% load static %}
+  {% block content %}
+  <div class="bg-fixed">
+    <h1 class="section-title top-offset">AJOUTER UNE PERSONNE AUTORISEE</h1>
+    <div class="form-box">
+      <form method="post">
+        {% csrf_token %}
+        <h2>Personne autorisée à venir récupérer les enfants</h2>
+        {% include 'registration/form_snippet.html' with form=form %}
+        <hr class="separator">
+        <button class="form-button" type="submit">Enregistrer</button>
+      </form>
+    </div>
+  </div>
+  {% endblock %}
