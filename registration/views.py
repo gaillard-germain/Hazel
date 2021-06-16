@@ -1,47 +1,56 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.http import Http404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .forms import (SignUpForm, FamilyForm, ChildForm, LegalGuardianForm,
     AuthorizedPersonForm, ParentalAuthorizationForm, DoctorForm)
-from .models import Family, Child, Adult
+from .models import User, Family, Child, Adult
 
 
-def logout_request(request):
-    """Logout view"""
+class SignUp(View):
 
-    logout(request)
-    return render(request, 'registration/logout.html')
-
-
-class SignUp(TemplateView):
-
-    user_form_class = SignUpForm
-    family_form_class = FamilyForm
-    doctor_form_class = DoctorForm
+    form_class = SignUpForm
     template_name = 'registration/signup.html'
 
-    def post(self, request):
-        post_data = request.POST or None
-        user_form = self.user_form_class(post_data, prefix='user')
-        family_form = self.family_form_class(post_data, prefix='family')
-        doctor_form = self.doctor_form_class(post_data, prefix='doctor')
+    def post(self, request, *args, **kwargs):
 
-        context = self.get_context_data(
-            user_form=user_form,
-            family_form=family_form,
-            doctor_form=doctor_form
-        )
+        form = self.form_class(request.POST or None)
 
-        if (user_form.is_valid() and family_form.is_valid()
-            and doctor_form.is_valid()):
-            user = user_form.save()
+        if form.is_valid():
+            user = form.save()
 
             group, created = Group.objects.get_or_create(name='parents')
             user.groups.add(group)
+
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=user.username, password=raw_password)
+            login(request, user)
+
+            return redirect('home:index')
+
+        context  = {'form': form}
+
+        return render(request, self.template_name, context)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
+
+
+class RegFamily(View):
+
+    family_form_class = FamilyForm
+    doctor_form_class = DoctorForm
+    template_name = 'registration/regfamily.html'
+
+    def post(self, request, *args, **kwargs):
+
+        family_form = self.family_form_class(request.POST or None)
+        doctor_form = self.doctor_form_class(request.POST or None)
+
+        if family_form.is_valid() and doctor_form.is_valid():
+            user = User.objects.get(id=request.user.id)
 
             family = family_form.save(commit=False)
             family.name = family_form.cleaned_data.get('name').upper()
@@ -50,23 +59,28 @@ class SignUp(TemplateView):
             family.doctor = Adult.create_doc(doctor_form)
             family.save()
 
-            raw_password = user_form.cleaned_data.get('password1')
-            user = authenticate(username=user.username, password=raw_password)
-            login(request, user)
+            return redirect('registration:myaccount')
 
-            return redirect('home:index')
+        context = {
+            'family_form': family_form,
+            'doctor_form': doctor_form
+        }
 
-        return self.render_to_response(context)
+        return render(request, self.template_name, context)
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
-
 
 class ManageAccount(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            family = Family.objects.get(user=request.user.id)
+            try:
+                family = Family.objects.get(user=request.user.id)
+
+            except:
+                return redirect('registration:regfamily')
+
             children = Child.objects.filter(family=family.id)
             authorized_persons = Adult.objects.filter(family_friends=family)
 
@@ -78,6 +92,7 @@ class ManageAccount(View):
             return render(request, 'registration/myaccount.html', context)
         else:
             raise Http404()
+
 
 
 class RegChild(View):

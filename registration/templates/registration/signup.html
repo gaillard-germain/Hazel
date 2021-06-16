@@ -7,36 +7,9 @@
       <form method="post">
         {% csrf_token %}
         <h2>Informations utilisateur</h2>
-        {% include 'registration/form_snippet.html' with form=user_form%}
+        {% include 'registration/form_snippet.html' with form=form%}
         <hr class="separator">
-        <h2>Informations famille</h2>
-        {% include 'registration/form_snippet.html' with form=family_form%}
-        <hr class="separator">
-        <h2>Médecin de famille</h2>
-        {% include 'registration/form_snippet.html' with form=doctor_form%}
-        <hr class="separator">
-        <h4>Pour finaliser l'enregistrement vous devez accepter les conditions ci-dessous.</h4>
-        <div class="checkbox-box">
-          <div class="line">
-            <input type="checkbox" id="agreementInfo" name="agreement" value="agreementInfo" onclick="validate()">
-            <label for="agreementInfo">
-              Je déclare exacts les renseignements portés sur cette fiche et m'engage à signaler toute modification,
-            </label>
-          </div>
-          <div class="line">
-            <input type="checkbox" id="agreementRules" name="agreement" value="agreementRules" onclick="validate()">
-            <label for="agreementRules">
-              J'accepte le <a href="">réglement intérieur de la structure</a>,
-            </label>
-          </div>
-          <div class="line">
-            <input type="checkbox" id="agreementHealth" name="agreement" value="agreementHealth" onclick="validate()">
-            <label for="agreementHealth">
-              J'autorise le(s) responsable(s) de la structure à prendre, le cas échéant, toutes mesures rendues nécessaires par l'état de santé de mon enfant.
-            </label>
-          </div>
-        </div>
-        <button id="register-family" class="form-button" type="submit" disabled>S'inscrire</button>
+        <button class="form-button" type="submit">Créer un compte</button>
       </form>
     </div>
   </div>

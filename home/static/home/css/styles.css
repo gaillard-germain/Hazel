@@ -188,6 +188,12 @@ header {
   position: fixed;
 }
 
+.msg-box {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: var(--warning);
+  padding: 0.5em;
+}
+
 .form-box {
   width: 50%;
   background-color: rgba(255, 255, 255, 0.7);

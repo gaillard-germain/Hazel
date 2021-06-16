@@ -25,7 +25,7 @@
           </button>
           <div id="account" class="dropdown-content">
             <a href="{% url 'registration:myaccount' %}">Mon compte</a>
-            <a href="/registration/accounts/logout">Déconnexion</a>
+            <a href="{% url 'registration:logout' %}">Déconnexion</a>
           </div>
         </div>
         {% else %}
@@ -35,7 +35,7 @@
             <span>Connexion</span>
           </button>
           <div id="account" class="dropdown-content">
-            <a href="/registration/accounts/login">Se connecter</a>
+            <a href="{% url 'registration:login' %}">Se connecter</a>
             <a href="{% url 'registration:signup' %}">Créer un compte</a>
           </div>
         </div>

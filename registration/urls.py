@@ -1,5 +1,5 @@
 from django.urls import path, include
-
+from django.contrib.auth import views as auth_views
 from . import views
 from .forms import LegalGuardianForm
 
@@ -7,9 +7,14 @@ from .forms import LegalGuardianForm
 app_name = 'registration'
 
 urlpatterns = [
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('logout', views.logout_request, name='logout'),
+    path('login',
+        auth_views.LoginView.as_view(template_name='registration/login.html'),
+        name='login'),
+    path('logout/',
+        auth_views.LogoutView.as_view(template_name='registration/logout.html'),
+        name='logout'),
     path('signup', views.SignUp.as_view(), name='signup'),
+    path('regfamily', views.RegFamily.as_view(), name='regfamily'),
     path('myaccount', views.ManageAccount.as_view(), name='myaccount'),
     path('regchild_step1', views.RegChild.as_view(), name='regchild_step1'),
     path(
