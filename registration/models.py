@@ -116,9 +116,9 @@ class Child(models.Model):
             firstname=session_dict['firstname'].title(),
             lastname=session_dict['lastname'].upper(),
             birth_date=session_dict['birth_date'],
-            grade=session_dict['grade'].upper(),
-            school=session_dict['school'].upper(),
-            info=session_dict['info'].capitalize()
+            grade=session_dict['grade'],
+            school=session_dict['school'],
+            info=session_dict['info']
         )
 
         return child

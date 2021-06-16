@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.views import View
+from django.views.generic import TemplateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import Group
 from django.http import Http404
@@ -15,14 +17,25 @@ def logout_request(request):
     return render(request, 'registration/logout.html')
 
 
-def signup(request):
-    """Signup view"""
+class SignUp(TemplateView):
 
-    user_form = SignUpForm(request.POST or None)
-    family_form = FamilyForm(request.POST or None)
-    doctor_form = DoctorForm(request.POST or None)
+    user_form_class = SignUpForm
+    family_form_class = FamilyForm
+    doctor_form_class = DoctorForm
+    template_name = 'registration/signup.html'
 
-    if request.method == 'POST':
+    def post(self, request):
+        post_data = request.POST or None
+        user_form = self.user_form_class(post_data, prefix='user')
+        family_form = self.family_form_class(post_data, prefix='family')
+        doctor_form = self.doctor_form_class(post_data, prefix='doctor')
+
+        context = self.get_context_data(
+            user_form=user_form,
+            family_form=family_form,
+            doctor_form=doctor_form
+        )
+
         if (user_form.is_valid() and family_form.is_valid()
             and doctor_form.is_valid()):
             user = user_form.save()
@@ -43,102 +56,68 @@ def signup(request):
 
             return redirect('home:index')
 
-    context = {
-        'user_form': user_form,
-        'family_form': family_form,
-        'doctor_form': doctor_form
-    }
+        return self.render_to_response(context)
 
-    return render(request, 'registration/signup.html', context)
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
-def manage_account(request):
-    """User's account informations view"""
+class ManageAccount(View):
 
-    if request.user.is_authenticated:
-        family = Family.objects.get(user=request.user.id)
-        children = Child.objects.filter(family=family.id)
-        authorized_persons = Adult.objects.filter(family_friends=family)
+    def get(self, request):
+        if request.user.is_authenticated:
+            family = Family.objects.get(user=request.user.id)
+            children = Child.objects.filter(family=family.id)
+            authorized_persons = Adult.objects.filter(family_friends=family)
 
-        context = {
-            'family': family,
-            'children': children,
-            'authorized_persons': authorized_persons
+            context = {
+                'family': family,
+                'children': children,
+                'authorized_persons': authorized_persons
+            }
+            return render(request, 'registration/myaccount.html', context)
+        else:
+            raise Http404()
+
+
+class RegChild(View):
+
+    form_class = ChildForm
+    template_name = 'registration/regchild.html'
+    session_key = 'child'
+    title = 'Enfant'
+    step = 1
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(request.POST or None)
+
+        if form.is_valid():
+            request.session[self.session_key] = form.cleaned_data
+            return redirect('registration:regchild_step{}'.format(self.step+1))
+
+        context  = {
+        'form': form,
+        'h2': self.title,
+        'step': self.step
         }
-        return render(request, 'registration/myaccount.html', context)
-    else:
-        raise Http404()
 
-# class ChildWizard(SessionWizardView):
-#     template_name = 'registration/regchild.html'
-#     form_list = [ChildForm, LegalGuardianForm]
-#
-#     def done(self, form_list, **kwargs):
-#         return render(self.request, 'done.html', {
-#             'form_data': [form.cleaned_data for form in form_list],
-#         })
+        return render(request, self.template_name, context)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
 
 
-def regchild_step1(request):
-    """ first step form to register a child """
+class RegChildFinal(RegChild):
 
-    initial = {'child': request.session.get('child', None)}
-    form = ChildForm(request.POST or None, initial=initial)
-    if request.method == 'POST':
-        if form.is_valid():
-            request.session['child'] = form.cleaned_data
-            return redirect('registration:regchild_step2')
+    form_class = ParentalAuthorizationForm
+    title = 'Autorisations parentales'
+    step = 4
 
-    context  = {
-        'form': form,
-        'h2': 'Enfant',
-        'step': 1
-    }
+    def post(self, request, *args, **kwargs):
 
-    return render(request, 'registration/regchild.html', context)
+        form = self.form_class(request.POST or None)
 
-
-def regchild_step2(request):
-    """ second step form to register a child """
-
-    form = LegalGuardianForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            request.session['lg1'] = form.cleaned_data
-            return redirect('registration:regchild_step3')
-
-    context  = {
-        'form': form,
-        'h2': 'Mère / Responsable Légal 1',
-        'step': 2
-    }
-
-    return render(request, 'registration/regchild.html', context)
-
-
-def regchild_step3(request):
-    """ third step form to register a child """
-
-    form = LegalGuardianForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            request.session['lg2'] = form.cleaned_data
-            return redirect('registration:regchild_step4')
-
-    context  = {
-        'form': form,
-        'h2': "Père / Responsable légal 2",
-        'step': 3
-    }
-
-    return render(request, 'registration/regchild.html', context)
-
-
-def regchild_step4(request):
-    """ fourth step form to register a child """
-
-    form = ParentalAuthorizationForm(request.POST or None)
-    if request.method == 'POST':
         if form.is_valid():
             family = Family.objects.get(user=request.user.id)
             child = Child.create_child(family, request.session['child'])
@@ -152,19 +131,24 @@ def regchild_step4(request):
             child.save()
             return redirect('registration:myaccount')
 
-    context  = {
+        context  = {
         'form': form,
-        'h2': "Autorisations parentales",
-        'step': 4
-    }
+        'h2': self.title,
+        'step': self.step
+        }
 
-    return render(request, 'registration/regchild.html', context)
+        return render(request, self.template_name, context)
 
 
-def regperson(request):
+class RegPerson(View):
 
-    form = AuthorizedPersonForm(request.POST or None)
-    if request.method == 'POST':
+    form_class = AuthorizedPersonForm
+    template_name = 'registration/regperson.html'
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(request.POST or None)
+
         if form.is_valid():
             family = Family.objects.get(user=request.user.id)
             person = Adult.create_person(form)
@@ -172,6 +156,9 @@ def regperson(request):
 
             return redirect('registration:myaccount')
 
-    context = {'form': form}
+        context  = {'form': form}
 
-    return render(request, 'registration/regperson.html', context)
+        return render(request, self.template_name, context)
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)
