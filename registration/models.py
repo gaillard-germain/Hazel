@@ -125,4 +125,6 @@ class Child(models.Model):
 
     @classmethod
     def get_age(cls):
-        return int((date.today() - cls.birth_date).days/365.2425)
+        return int(
+            (date.today() - date.fromisoformat(cls.birth_date)).days/365.2425
+        )

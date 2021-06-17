@@ -155,6 +155,7 @@ class DoctorForm(forms.ModelForm):
             'address': ('Adresse')
         }
 
+
 class ParentalAuthorizationForm(forms.Form):
     YN_CHOICES = [(True, 'Oui'), (False, 'Non')]
 

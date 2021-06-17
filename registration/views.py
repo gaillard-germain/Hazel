@@ -140,9 +140,9 @@ class RegChildFinal(RegChild):
             lg2 = Adult.create_lg(request.session['lg2'])
             child.legal_guardian_1 = lg1
             child.legal_guardian_2 = lg2
-            child.go_alone = form.cleaned_data['go_alone']
-            child.activity = form.cleaned_data['activity']
-            child.image_rights = form.cleaned_data['image_rights']
+            child.go_alone = form.cleaned_data.get('go_alone')
+            child.activity = form.cleaned_data.get('activity')
+            child.image_rights = form.cleaned_data.get('image_rights')
             child.save()
             return redirect('registration:myaccount')
 
