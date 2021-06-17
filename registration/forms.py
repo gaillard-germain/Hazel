@@ -16,7 +16,7 @@ class FamilyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['phone'].widget.attrs.update({
+        self.fields['home_phone'].widget.attrs.update({
             'maxlength': '10',
             'pattern': '[0-9]+'
         })
@@ -28,12 +28,13 @@ class FamilyForm(forms.ModelForm):
 
     class Meta:
         model = Family
-        fields = ('name', 'phone', 'address', 'plan', 'beneficiary_name',
-            'beneficiary_number', 'insurance_name', 'insurance_number')
+        fields = ('use_name', 'home_phone', 'home_address', 'plan',
+            'beneficiary_name', 'beneficiary_number', 'insurance_name',
+            'insurance_number')
         labels = {
-            'name': ("Nom d'usage"),
-            'phone': ('Téléphone (domicile)'),
-            'address': ('Adresse'),
+            'use_name': ("Nom d'usage"),
+            'home_phone': ('Téléphone (domicile)'),
+            'home_address': ('Adresse'),
             'plan': ("Régime d'appartenance"),
             'beneficiary_name': ("Nom Allocataire"),
             'beneficiary_number': ("Numéro Allocataire"),

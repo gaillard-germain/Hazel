@@ -15,11 +15,10 @@ class Adult(models.Model):
     email = models.EmailField(max_length=50, null=True)
     address = models.CharField(max_length=100)
     cell_phone = models.CharField(max_length=10, null=True)
-    family_situation = models.CharField(max_length=50, null=True)
-    relationship = models.CharField(max_length=50, null=True)
-    occupation = models.CharField(max_length=50, null=True)
-    job_address = models.CharField(max_length=200, null=True)
-    job_phone = models.CharField(max_length=10, null=True)
+    family_situation = models.CharField(max_length=50, blank=True, null=True)
+    relationship = models.CharField(max_length=50, blank=True, null=True)
+    occupation = models.CharField(max_length=50, blank= True, null=True)
+    job_phone = models.CharField(max_length=10, blank= True, null=True)
 
     def __str__(self):
         return '{} {}'.format(self.firstname, self.lastname)
@@ -29,13 +28,15 @@ class Adult(models.Model):
         legal_guardian, created = cls.objects.get_or_create(
             firstname=session_dict['firstname'].title(),
             lastname=session_dict['lastname'].upper(),
-            family_situation=session_dict['family_situation'].capitalize(),
-            occupation=session_dict['occupation'].capitalize(),
-            job_phone=session_dict['job_phone'],
-            cell_phone=session_dict['cell_phone'],
-            email=session_dict['email'],
-            address=session_dict['address'].upper()
+            cell_phone=session_dict['cell_phone']
         )
+        if created:
+            legal_guardian.family_situation=session_dict['family_situation']
+            legal_guardian.occupation=session_dict['occupation']
+            legal_guardian.job_phone=session_dict['job_phone']
+            legal_guardian.email=session_dict['email']
+            legal_guardian.address=session_dict['address'].upper()
+            legal_guardian.save()
 
         return legal_guardian
 
@@ -56,9 +57,11 @@ class Adult(models.Model):
             firstname=form.cleaned_data.get('firstname').title(),
             lastname=form.cleaned_data.get('lastname').upper(),
             cell_phone=form.cleaned_data.get('cell_phone'),
-            relationship=form.cleaned_data.get('relationship'),
-            address="NON REQUIS"
         )
+        if created:
+            person.relationship=form.cleaned_data.get('relationship'),
+            person.address="NON REQUIS"
+            person.save()
 
         return person
 
@@ -67,18 +70,19 @@ class Family(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    name = models.CharField(max_length=50)
-    address = models.CharField(max_length=100)
-    phone = models.CharField(max_length=10)
+    use_name = models.CharField(max_length=50)
+    home_address = models.CharField(max_length=100)
+    home_phone = models.CharField(max_length=10)
     authorized_person = models.ManyToManyField(
         Adult, related_name='family_friends', blank=True
     )
     doctor = models.ForeignKey(
-        Adult, related_name='family_doctor', on_delete=models.SET_NULL, null=True
+        Adult, related_name='family_doctor',
+        on_delete=models.SET_NULL, null=True
     )
     plan = models.CharField(max_length=50)
-    beneficiary_name = models.CharField(max_length=50, null=True)
-    beneficiary_number = models.CharField(max_length=50, null=True)
+    beneficiary_name = models.CharField(max_length=50, blank=True, null=True)
+    beneficiary_number = models.CharField(max_length=50, blank=True, null=True)
     insurance_name = models.CharField(max_length=50)
     insurance_number = models.CharField(max_length=50)
 
@@ -94,7 +98,7 @@ class Child(models.Model):
     grade = models.CharField(max_length=10, blank=True, null=True)
     school = models.CharField(max_length=50, blank=True, null=True)
     info = models.TextField(blank=True, null=True)
-    go_alone = models.BooleanField(default=True)
+    go_alone = models.BooleanField(default=False)
     activity = models.BooleanField(default=True)
     image_rights = models.BooleanField(default=True)
     legal_guardian_1 = models.ForeignKey(

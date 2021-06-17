@@ -53,8 +53,9 @@ class RegFamily(View):
             user = User.objects.get(id=request.user.id)
 
             family = family_form.save(commit=False)
-            family.name = family_form.cleaned_data.get('name').upper()
-            family.address = family_form.cleaned_data.get('address').upper()
+            family.use_name = family_form.cleaned_data.get('use_name').upper()
+            family.home_address = family_form.cleaned_data.get(
+                'home_address').upper()
             family.user = user
             family.doctor = Adult.create_doc(doctor_form)
             family.save()

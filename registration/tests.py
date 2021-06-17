@@ -37,16 +37,17 @@ class RegFamilyPageTestCase(TestCase):
                                              self.password)
         self.client.login(username=self.username, password=self.password)
         self.form = {
-            'name': 'FAKE',
-            'phone': '0123456789',
-            'address': '1 avenue Thomas More 12345 UTOPIA',
+            'use_name': 'FAKE',
+            'home_phone': '0123456789',
+            'home_address': '1 avenue Thomas More 12345 UTOPIA',
             'plan': 'CAF',
             'beneficiary_name': 'FAKE',
             'beneficiary_number': '12345F',
             'insurance_name': 'No Problemo',
             'insurance_number': 'NP987654',
             'lastname': 'MABOULE',
-            'job_phone': '9876543210',
+            'address': '2 avenue Thomas More 12345 UTOPIA',
+            'job_phone': '9876543210'
         }
 
     def test_regfamily_page_returns_200(self):
