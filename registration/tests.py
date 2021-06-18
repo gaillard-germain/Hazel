@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 from .models import User, Family, Adult, Child
-from.forms import FamilyForm, DoctorForm
 
 
 class SignUpPageTestCase(TestCase):
@@ -58,7 +57,7 @@ class RegFamilyPageTestCase(TestCase):
         families = Family.objects.all()
         old_families = families.count()
         response = self.client.post(reverse('registration:regfamily'),
-            self.form)
+                                    self.form)
         new_families = families.count()
         self.assertEqual(response.status_code, 302)
         self.assertEqual(new_families, old_families+1)
@@ -66,8 +65,7 @@ class RegFamilyPageTestCase(TestCase):
     def test_regfamily_post_create_doctor(self):
         doctors = Adult.objects.all()
         old_doctors = doctors.count()
-        response = self.client.post(reverse('registration:regfamily'),
-            self.form)
+        self.client.post(reverse('registration:regfamily'), self.form)
         new_doctors = doctors.count()
         self.assertEqual(new_doctors, old_doctors+1)
 
@@ -87,7 +85,7 @@ class ManageAccountPageTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_myaccount_page_returns_200(self):
-        family = Family.objects.create(user=self.user)
+        Family.objects.create(user=self.user)
         response = self.client.get(reverse('registration:myaccount'))
         self.assertEqual(response.status_code, 200)
 
@@ -157,7 +155,7 @@ class RegChildPageTestCase(TestCase):
         old_childs = childs.count()
 
         response = self.client.post(reverse('registration:regchild_step4'),
-            self.form)
+                                    self.form)
 
         new_legal_guardians = legal_guardians.count()
         new_childs = childs.count()
@@ -191,7 +189,6 @@ class RegPersonPageTestCase(TestCase):
     def test_regperson_post_create_person(self):
         persons = Adult.objects.all()
         old_persons = persons.count()
-        response = self.client.post(reverse('registration:regperson'),
-            self.form)
+        self.client.post(reverse('registration:regperson'), self.form)
         new_persons = persons.count()
         self.assertEqual(new_persons, old_persons+1)

@@ -1,7 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.conf import settings
 from django import forms
-
 from .models import User, Family, Adult, Child
 
 
@@ -29,8 +27,8 @@ class FamilyForm(forms.ModelForm):
     class Meta:
         model = Family
         fields = ('use_name', 'home_phone', 'home_address', 'plan',
-            'beneficiary_name', 'beneficiary_number', 'insurance_name',
-            'insurance_number')
+                  'beneficiary_name', 'beneficiary_number', 'insurance_name',
+                  'insurance_number')
         labels = {
             'use_name': ("Nom d'usage"),
             'home_phone': ('Téléphone (domicile)'),

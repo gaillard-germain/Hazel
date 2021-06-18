@@ -17,8 +17,8 @@ class Adult(models.Model):
     cell_phone = models.CharField(max_length=10, null=True)
     family_situation = models.CharField(max_length=50, blank=True, null=True)
     relationship = models.CharField(max_length=50, blank=True, null=True)
-    occupation = models.CharField(max_length=50, blank= True, null=True)
-    job_phone = models.CharField(max_length=10, blank= True, null=True)
+    occupation = models.CharField(max_length=50, blank=True, null=True)
+    job_phone = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return '{} {}'.format(self.firstname, self.lastname)
@@ -30,13 +30,13 @@ class Adult(models.Model):
             lastname=session_dict['lastname'].upper(),
             cell_phone=session_dict['cell_phone']
         )
-        if created:
-            legal_guardian.family_situation=session_dict['family_situation']
-            legal_guardian.occupation=session_dict['occupation']
-            legal_guardian.job_phone=session_dict['job_phone']
-            legal_guardian.email=session_dict['email']
-            legal_guardian.address=session_dict['address'].upper()
-            legal_guardian.save()
+
+        legal_guardian.family_situation = session_dict['family_situation']
+        legal_guardian.occupation = session_dict['occupation']
+        legal_guardian.job_phone = session_dict['job_phone']
+        legal_guardian.email = session_dict['email']
+        legal_guardian.address = session_dict['address'].upper()
+        legal_guardian.save()
 
         return legal_guardian
 
@@ -58,12 +58,13 @@ class Adult(models.Model):
             lastname=form.cleaned_data.get('lastname').upper(),
             cell_phone=form.cleaned_data.get('cell_phone'),
         )
-        if created:
-            person.relationship=form.cleaned_data.get('relationship'),
-            person.address="NON REQUIS"
-            person.save()
+
+        person.relationship = form.cleaned_data.get('relationship'),
+        person.address = "NON REQUIS"
+        person.save()
 
         return person
+
 
 class Family(models.Model):
     user = models.ForeignKey(
@@ -119,11 +120,13 @@ class Child(models.Model):
             family=family,
             firstname=session_dict['firstname'].title(),
             lastname=session_dict['lastname'].upper(),
-            birth_date=session_dict['birth_date'],
-            grade=session_dict['grade'],
-            school=session_dict['school'],
-            info=session_dict['info']
+            birth_date=session_dict['birth_date']
         )
+
+        child.grade = session_dict['grade']
+        child.school = session_dict['school']
+        child.info = session_dict['info']
+        child.save()
 
         return child
 

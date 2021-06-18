@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.http import Http404
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .forms import (SignUpForm, FamilyForm, ChildForm, LegalGuardianForm,
-    AuthorizedPersonForm, ParentalAuthorizationForm, DoctorForm)
+from .forms import (SignUpForm, FamilyForm, ChildForm, AuthorizedPersonForm,
+                    ParentalAuthorizationForm, DoctorForm)
 from .models import User, Family, Child, Adult
 
 
@@ -30,7 +29,7 @@ class SignUp(View):
 
             return redirect('home:index')
 
-        context  = {'form': form}
+        context = {'form': form}
 
         return render(request, self.template_name, context)
 
@@ -72,6 +71,7 @@ class RegFamily(View):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
 
+
 class ManageAccount(View):
 
     def get(self, request):
@@ -79,7 +79,7 @@ class ManageAccount(View):
             try:
                 family = Family.objects.get(user=request.user.id)
 
-            except:
+            except Family.DoesNotExist:
                 return redirect('registration:regfamily')
 
             children = Child.objects.filter(family=family.id)
@@ -93,7 +93,6 @@ class ManageAccount(View):
             return render(request, 'registration/myaccount.html', context)
         else:
             raise Http404()
-
 
 
 class RegChild(View):
@@ -112,10 +111,10 @@ class RegChild(View):
             request.session[self.session_key] = form.cleaned_data
             return redirect('registration:regchild_step{}'.format(self.step+1))
 
-        context  = {
-        'form': form,
-        'h2': self.title,
-        'step': self.step
+        context = {
+            'form': form,
+            'h2': self.title,
+            'step': self.step
         }
 
         return render(request, self.template_name, context)
@@ -147,10 +146,10 @@ class RegChildFinal(RegChild):
             child.save()
             return redirect('registration:myaccount')
 
-        context  = {
-        'form': form,
-        'h2': self.title,
-        'step': self.step
+        context = {
+            'form': form,
+            'h2': self.title,
+            'step': self.step
         }
 
         return render(request, self.template_name, context)
@@ -172,7 +171,7 @@ class RegPerson(View):
 
             return redirect('registration:myaccount')
 
-        context  = {'form': form}
+        context = {'form': form}
 
         return render(request, self.template_name, context)
 
