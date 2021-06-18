@@ -9,7 +9,7 @@
         {% include 'registration/form_snippet.html' with form=form%}
         <button class="form-button" type="submit">Se Connecter</button>
         {% if form.errors %}
-          <p class="text-warning">Nom d'utilisateur ou mot de passe invalide. Essayez de nouveau.</p>
+          <p class="text-warning text-small">Nom d'utilisateur ou mot de passe invalide. Essayez de nouveau.</p>
         {% endif %}
       </form>
       <h3>Ou <a href="{% url 'registration:signup' %}">créez un compte.</a></h3>

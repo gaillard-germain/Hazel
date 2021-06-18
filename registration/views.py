@@ -74,7 +74,7 @@ class RegFamily(View):
 
 class ManageAccount(View):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             try:
                 family = Family.objects.get(user=request.user.id)

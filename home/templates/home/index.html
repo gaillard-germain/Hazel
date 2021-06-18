@@ -4,12 +4,21 @@
   <div class="intro" style="background-image: url({% static 'home/img/home_intro.jpg' %})">
     <h1 class="main-title">Accueil de loisirs de Monflanquin</h1>
   </div>
+  <section id="info">
+    <div class="s-icon">
+      <i class="fas fa-info fa-2x"></i>
+    </div>
+    <h1 class="section-title">Informations</h1>
+    <hr class="separator">
+    {% include 'home/info.html' %}
+  </section>
   <section id="agenda">
     <div class="s-icon">
       <i class="far fa-calendar-alt fa-2x"></i>
     </div>
-    <h1 class="section-title">Programme</h1>
+    <h1 class="section-title">Agenda</h1>
     <hr class="separator">
+    {% include 'home/agenda.html' %}
   </section>
   <section id="documents">
     <div class="s-icon">
@@ -17,14 +26,7 @@
     </div>
     <h1 class="section-title">Documents</h1>
     <hr class="separator">
-    <div class="inner-section">
-      <a href="https://www.ccbastides47.com/wp-content/uploads/2020/12/Fiche-dinscription-ALP-ALSH-2020-2021-Alexis.pdf" target="_blank" rel="noopener noreferrer">
-        Fiche d’inscription ALSH/ALP
-      </a>
-      <a href="http://www.ccbastides47.com/wp-content/uploads/2019/10/Fiche_sanitaire_de_liaison_cle1c348b.pdf" target="_blank" rel="noopener noreferrer">
-        Fiche sanitaire de liaison
-      </a>
-    </div>
+    {% include 'home/documents.html' %}
   </section>
   <section id="contact">
     <div class="s-icon">
@@ -32,11 +34,6 @@
     </div>
     <h1 class="section-title">Nous contacter</h1>
     <hr class="separator">
-    <div class="inner-section">
-      <h3>ALSH Monflanquin</h3>
-      <p>Lieu-dit Coulon – 47150 MONFLANQUIN</p>
-      <p><i class="fas fa-phone-square"></i> 05.53.36.41.38</p>
-      <p><i class="fas fa-envelope-square"></i> alsh.monflanquin@orange.fr</p>
-    </div>
+    {% include 'home/contact.html' %}
   </section>
   {% endblock %}

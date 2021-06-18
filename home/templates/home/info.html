@@ -1,0 +1,32 @@
+<div class="inner-section">
+  <h2>Horaires d'ouverture</h2>
+  <p>L'Accueil de Loisirs est ouvert durant les vacances scolaires et les mercredis.</p>
+  <p>Les horaires de fonctionement sont de <strong>7h30</strong> à <strong>18h30</strong>.</p>
+  <p>Dans le prix journée est compris une collation le matin, le repas de midi et un goûter l'aprés-midi.</p>
+  <h2>Tarifs</h2>
+  <table id="prices">
+    <tr>
+      <th>Quotient Familial</th>
+      <th>Prix journée</th>
+      <th>Prix demi-journée</th>
+    </tr>
+    {% for price in prices %}
+      <tr>
+        <td>{{ price.family_quotient }}</td>
+        <td>{{ price.day }}€</td>
+        <td>{{ price.half_day }}€</td>
+      </tr>
+    {% endfor %}
+  </table>
+  <p class="text-warning">
+    Les factures doivent être <strong>obligatoirement</strong> payées avant le 20 du mois suivant.
+  </p>
+  <p>
+    Le réglement se fait <strong>directement</strong> au trésor public de Monflanquin.
+  </p>
+  <p>
+    N'oubliez pas vos <span class="text-warning">justificatif CAF ou MSA (avec votre QF) 2021</span>
+    afin que nous puissions vous appliquer le tarif correspondant,
+    <span class="text-warning text-small">sinon le tarif maximum sera appliqué.</span>
+  </p>
+</div>

@@ -1,5 +1,12 @@
 from django.shortcuts import render
+from django.views import View
+from .models import Price
 
 
-def index(request):
-    return render(request, 'home/index.html')
+class Index(View):
+
+    template_name = 'home/index.html'
+
+    def get(self, request, *args, **kwargs):
+        prices = Price.objects.all()
+        return render(request, self.template_name, {'prices': prices})
