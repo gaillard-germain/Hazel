@@ -60,3 +60,15 @@ function validate() {
     regFamilyBtn.disabled = true;
   }
 }
+
+
+function toggleAgenda(item) {
+  var all = document.getElementsByClassName("container");
+  for (i = 0; i < all.length; i++) {
+    if (all[i].classList.contains(item.innerHTML)) {
+      all[i].classList.toggle("hidden");
+    } else {
+      all[i].classList.add("hidden");
+    }
+  }
+}

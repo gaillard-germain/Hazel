@@ -1,3 +1,29 @@
 <div class="inner-section">
+  <h3>Choisissez une catégorie.</h3>
+  {% for category in agenda %}
+  <div class="categories">
+    <p class="text-small">{{ category.description }}</p>
+    <button class="form-button" type="button" name="button" onclick="toggleAgenda(this)">{{ category.name }}</button>
+  </div>
+  {% endfor %}
+  {% for category, days in agenda.items %}
+    <div class="{{ category.name }} container hidden">
+      <h3>{{ category.name }}</h3>
+      <div class="card-box">
+      {% for day, activities in days.items %}
+        <div class="card">
+          <h4>{{ day }}</h4>
+          {% for activity in activities %}
+          <div class="inner-card">
+            <p class="text-small">{{ activity.start_time }}</p>
+            <p class="card-center">{{ activity.name }}</p>
+            <p class="text-small">{{ activity.end_time }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      </div>
+    </div>
 
+  {% endfor %}
 </div>

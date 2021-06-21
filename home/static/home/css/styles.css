@@ -1,11 +1,14 @@
 @charset "UTF-8";
 
 :root {
-  --light-blue: #79a7c5;
-  --dark-blue: #285a7b;
+  --lightblue: #c5dcea;
+  --blue: #79a7c5;
+  --darkblue: #285a7b;
   --red: #b6491b;
   --green: #c6e293;
-  --dark-grey: #414141;
+  --orange: #e09b31;
+  --yellow: #f3e9ad;
+  --darkgrey: #414141;
   --warning: #e26908;
 }
 
@@ -52,7 +55,7 @@ header {
 #logo {
   display: inline-block;
   font-size: 2em;
-  color: var(--dark-grey);
+  color: var(--darkgrey);
 }
 
 .topnav {
@@ -71,7 +74,7 @@ header {
 
 .topnav .h-icon {
   display: none;
-  color: var(--light-blue);
+  color: var(--blue);
   padding-top: 2em;
 }
 
@@ -91,7 +94,7 @@ header {
   cursor: pointer;
   border: none;
   background-color: transparent;
-  color: var(--dark-grey);
+  color: var(--darkgrey);
   font-size: 1em;
   margin: 0;
   padding: 0 1em;
@@ -121,11 +124,11 @@ header {
 }
 
 .topnav a:hover, .dropdown:hover .dropbtn {
-  color: var(--light-blue);
+  color: var(--blue);
 }
 
 .dropdown-content a:hover {
-  background-color: var(--light-blue);
+  background-color: var(--blue);
   color: black;
 }
 
@@ -134,7 +137,7 @@ header {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .s-icon {
@@ -201,7 +204,7 @@ header {
   padding: 0.5em;
   border: 1px solid grey;
   border-radius: 10px;
-  color: var(--dark-grey);
+  color: var(--darkgrey);
   text-align: center;
 }
 
@@ -230,7 +233,7 @@ header {
 .form-button {
   cursor: pointer;
   background-color: transparent;
-  border: 2px solid var(--dark-grey);
+  border: 2px solid var(--darkgrey);
   border-radius: 10px;
   text-align: center;
   text-decoration: none;
@@ -243,14 +246,14 @@ header {
 
 .form-button:hover {
   background-color: rgba(255, 255, 255, 0.7);
-  border: 2px solid var(--light-blue);
-  color: var(--light-blue);
+  border: 2px solid var(--blue);
+  color: var(--blue);
 }
 
 .form-button:active {
   background-color: white;
-  border: 2px solid var(--dark-blue);
-  color: var(--dark-blue);
+  border: 2px solid var(--darkblue);
+  color: var(--darkblue);
 }
 
 .form-button:disabled {
@@ -265,7 +268,7 @@ header {
 }
 
 .form-box a:hover {
-  color: var(--light-blue);
+  color: var(--blue);
 }
 
 .radio-select {
@@ -305,8 +308,63 @@ section {
   padding: 0.5em;
 }
 
+#agenda .categories {
+  display: inline-block;
+}
+
+#agenda .categories p {
+  margin: 0;
+}
+
+#agenda .categories button {
+  margin: 0 1em 2em 1em;
+}
+
+#agenda .container h3{
+  font-style: italic;
+}
+
+#agenda .card-box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+#agenda .card {
+  width: 8em;
+  border-radius: 10px 10px 0 0;
+  margin: 0.2em;
+  display: flex;
+  flex-direction: column;
+}
+
+#agenda .card h4 {
+  border-radius: 10px 10px 0 0;
+  background-color: var(--orange);
+  margin: 0;
+  padding: 1em 0;
+}
+
+#agenda .card .inner-card {
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-image: linear-gradient(var(--lightblue), var(--darkblue));
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+#agenda .card .card-center {
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 0.5em;
+  font-weight: bold;
+}
+
 #documents .inner-section {
-  background-color: var(--green);
+  background-color: var(--lightblue);
 }
 
 #documents .inner-section a {
@@ -324,14 +382,14 @@ section {
 
 #prices th {
   padding: 0.5em;
-  background-color: var(--dark-blue);
+  background-color: var(--darkblue);
   color: white;
   border-radius: 10px 10px 0 0;
 }
 
 #prices td {
   padding: 0.5em;
-  background-color: var(--light-blue);
+  background-color: var(--blue);
 }
 
 .banner-img {
