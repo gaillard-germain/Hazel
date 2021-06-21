@@ -22,8 +22,10 @@ class IndexPageTestCase(TestCase):
         response = self.client.get(reverse('home:index'))
         self.assertEqual(response.status_code, 200)
 
-    def test_make_agenda_method(self):
-        agenda = Agenda.make_agenda()
+    def test_index_page_agenda_conform_to_expected(self):
+        response = self.client.get(reverse('home:index'))
         day = _date(self.agenda.entry, 'D d F')
         result = self.activity.name
-        self.assertEqual(agenda[self.category][day][0].name, result)
+        self.assertEqual(
+            response.context['agenda'][self.category][day][0].name, result
+        )
