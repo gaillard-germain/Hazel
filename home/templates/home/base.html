@@ -16,9 +16,9 @@
         <a id="logo" href="{% url 'home:index' %}">ALSH Monflanquin</a>
         <a href="/#info">Info</a>
         <a href="/#agenda">Agenda</a>
-        <a href="/#documents">Documents</a>
+        <a href="/#registration">Inscription</a>
+        <a href="{% url 'booking:calendar' %}">Réservation</a>
         <a href="/#contact">Contact</a>
-        <a href="{% url 'booking:calendar' %}">Réserver</a>
         {% if user.is_authenticated %}
         <div class="dropdown">
           <button onclick="dropDown()" class="dropbtn">

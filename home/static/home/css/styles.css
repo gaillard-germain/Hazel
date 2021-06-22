@@ -8,6 +8,7 @@
   --green: #c6e293;
   --orange: #e09b31;
   --yellow: #f3e9ad;
+  --lightgrey: #ececec;
   --darkgrey: #414141;
   --warning: #e26908;
 }
@@ -296,8 +297,22 @@ header {
   color: var(--red);
 }
 
+.inline {
+  display: inline-block;
+}
+
 section {
   text-align: center;
+}
+
+section a {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--darkblue);
+}
+
+section a:hover {
+  color: var(--blue);
 }
 
 .inner-section {
@@ -306,6 +321,10 @@ section {
 
 .inner-section h2 {
   padding: 0.5em;
+}
+
+#info, #registration {
+  background-color: var(--lightgrey);
 }
 
 #agenda .categories {
@@ -363,15 +382,17 @@ section {
   font-weight: bold;
 }
 
-#documents .inner-section {
-  background-color: var(--lightblue);
+#registration h3 {
+  margin: 2em 0;
 }
 
-#documents .inner-section a {
-  display: block;
-  text-decoration: none;
-  padding: 1em;
-  color: black;
+#registration ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#registration li {
+  padding: 0.5em;
 }
 
 #prices {
