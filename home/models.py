@@ -51,7 +51,8 @@ class Agenda(models.Model):
 class Activity(models.Model):
     name = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category, related_name='activities')
-    day = models.ForeignKey(Agenda, related_name='activity', on_delete=models.CASCADE)
+    day = models.ForeignKey(Agenda, related_name='activity',
+                            on_delete=models.CASCADE)
     start_time = models.TimeField()
     end_time = models.TimeField()
 

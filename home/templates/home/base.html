@@ -18,6 +18,7 @@
         <a href="/#agenda">Agenda</a>
         <a href="/#documents">Documents</a>
         <a href="/#contact">Contact</a>
+        <a href="{% url 'booking:calendar' %}">Réserver</a>
         {% if user.is_authenticated %}
         <div class="dropdown">
           <button onclick="dropDown()" class="dropbtn">
