@@ -7,6 +7,7 @@
   --red: #b6491b;
   --green: #c6e293;
   --orange: #e09b31;
+  --darkorange: #c5821c;
   --yellow: #f3e9ad;
   --lightgrey: #ececec;
   --darkgrey: #414141;
@@ -435,6 +436,76 @@ section a:hover {
 .sub-box {
   text-align: left;
 }
+
+.calendar {
+
+}
+
+.calendar h2 {
+  padding: 0;
+  margin: 0;
+}
+
+.calendar .months {
+  margin: 1em;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.calendar .months .month {
+  padding: 0.5em;
+  margin: 0.5em;
+  background-image: linear-gradient(var(--orange), var(--darkorange));;
+  border-radius: 10px;
+}
+
+.calendar .months .month h3 {
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 0.5em;
+  border-radius: 10px 10px 0 0;
+}
+
+.calendar .months .month .weekdays {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar .months .month .weekdays .weekday {
+  text-align: center;
+  width: 4em;
+}
+
+.calendar .months .month .weekdays .weekday h4 {
+  margin: 0;
+  padding: 0.5em;
+  border-bottom: 1px solid white;
+}
+
+.calendar .months .month .weekdays .weekday .day {
+  height: 4em;
+  margin: 0.2em;
+  padding-top: 0.7em;
+}
+
+.calendar .months .month .weekdays .weekday .day p {
+  cursor: pointer;
+  color: var(--darkgrey);
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  padding-top: 0.7em;
+  margin: 0 auto;
+}
+
+.calendar .months .month .weekdays .weekday .day p:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: black;
+  font-weight: bolder;
+}
+
+
 
 footer {
   text-align: center;

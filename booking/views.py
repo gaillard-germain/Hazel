@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.views import View
+from datetime import date
 from registration.models import Family, Child
+from .models import Period
 
 
 class Calendar(View):
@@ -22,13 +24,20 @@ class Calendar(View):
                 return redirect('registration:regfamily')
 
             try:
-                child = Child.objects.get(family=family)
+                children = Child.objects.filter(family=family)
 
             except Child.DoesNotExist:
                 return redirect('registration:regchild_step1')
 
+            periods = Period.objects.filter(end_date__gte=date.today())
+
+            calendars = {}
+            for period in periods:
+                calendars[period.name] = period.make_calendar()
+
+            context = {'calendars': calendars}
+
+            return render(request, self.template_name, context)
+
         else:
             return redirect('registration:login')
-
-
-        return self.post(request, *args, **kwargs)
