@@ -8,6 +8,17 @@
       </div>
       <h1 class="section-title">RESERVATION</h1>
       <hr class="separator">
+      <div class="options-box">
+        <div class="option">
+          <h4>Choisissez journée complète ou demi-journée</h4>
+          <input id="full-day" type="radio" name="day-option" value="full-day">
+          <label for="full-day">Journée</label>
+          <input id="half-day" type="radio" name="day-option" value="half-day">
+          <label for="half-day">Demi-journée</label>
+          <input id="cancel" type="radio" name="day-option" value="cancel">
+          <label for="cancel">Annuler</label>
+        </div>
+      </div>
       {% for calendar, months in calendars.items %}
       <div class="calendar">
         <h2>{{ calendar }}</h2>
@@ -19,9 +30,16 @@
             {% for weekday, days in weekdays.items %}
               <div class="weekday">
                 <h4>{{ weekday }}</h4>
-                {% for day in days %}
-                <div class="day">
-                  <p>{{ day.day }}</p>
+                {% for day, status in days.items %}
+                <div class="day-box">
+                  {% csrf_token %}
+                  {% if status == 'full' %}
+                  <button class="day full-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
+                  {% elif status == 'half' %}
+                  <button class="day half-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
+                  {% else %}
+                  <button class="day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
+                  {% endif %}
                 </div>
                 {% endfor %}
               </div>
@@ -33,4 +51,8 @@
       </div>
       {% endfor %}
     </section>
+    <script type="text/javascript">
+      var childId = {{ child.id }}
+    </script>
+    <script type="text/javascript" src="{% static 'booking/js/scripts.js' %}"></script>
   {% endblock %}

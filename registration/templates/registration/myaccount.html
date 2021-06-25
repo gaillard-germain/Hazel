@@ -1,14 +1,14 @@
 {% extends 'home/base.html' %}
 {% load static %}
   {% block content %}
-  <section>
+  <section id="myaccount">
     <img class="banner-img" src="{% static 'registration/img/banner_1.jpg' %}" alt="">
     <div class="s-icon">
       <i class="far fa-user fa-2x"></i>
     </div>
     <h1 class="section-title">MON COMPTE</h1>
     <hr class="separator">
-    <div class="info-box">
+    <div class="info-box bg-lightblue">
       <h2>Utilisateur</h2>
       <table>
         <tr>
@@ -44,23 +44,28 @@
         </tr>
       </table>
       <h2>Enfants inscris</h2>
-      <div class="sub-box">
-        <ul>
-          {% for child in children %}
-          <li>{{ child.firstname }} {{ child.lastname }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      <a class="form-button" href="{% url 'registration:regchild_step1' %}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
-    <h2>Autres personnes autorisées à récupérer les enfants</h2>
-    <div class="sub-box">
-      <ul>
-        {% for person in authorized_persons %}
-        <li>{{ person }}</li>
+      <table>
+        {% for child in children %}
+        <tr>
+          <td>{{ child.firstname }} {{ child.lastname }}</td>
+          <td><a class="form-button" href="{% url 'booking:calendar' child_id=child.id %}">Réservation</a></td>
+        </tr>
         {% endfor %}
-      </ul>
+      </table>
+      <div class="box-1">
+        <a class="form-button" href="{% url 'registration:regchild_step1' %}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
+      </div>
+    <h2>Autres personnes autorisées à récupérer les enfants</h2>
+    <table>
+      {% for person in authorized_persons %}
+      <tr>
+        <td>{{ person }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="box-1">
+      <a class="form-button" href="{% url 'registration:regperson' %}"><i class="fas fa-plus"></i> Ajouter une personne</a>
     </div>
-    <a class="form-button" href="{% url 'registration:regperson' %}"><i class="fas fa-plus"></i> Ajouter une personne</a>
   </div>
   </section>
   {% endblock %}

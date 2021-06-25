@@ -12,8 +12,17 @@ class Period(models.Model):
     def __str__(self):
         return self.name
 
-    def make_calendar(self):
+    def make_calendar(self, child):
         """ Returns a dict {month: {weekday: [date]}} of the period"""
+
+        booking_dict = {}
+        booking = Booking.objects.filter(child=child)
+        for obj in booking:
+            if obj.whole:
+                status = 'full'
+            else:
+                status = 'half'
+            booking_dict[obj.day] = status
 
         calendar = {}
         current = self.start_date + timedelta(days=1)
@@ -33,9 +42,13 @@ class Period(models.Model):
                     calendar[month] = {}
 
                 if weekday not in calendar[month]:
-                    calendar[month][weekday] = []
+                    calendar[month][weekday] = {}
 
-                calendar[month][weekday].append(current)
+                if current in booking_dict:
+                    calendar[month][weekday][current] = booking_dict[current]
+
+                else:
+                    calendar[month][weekday][current] = None
 
             current += timedelta(days=1)
 
@@ -48,3 +61,6 @@ class Booking(models.Model):
     day = models.DateField()
     whole = models.BooleanField(default=True)
     validated = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '{} {}'.format(self.child, _date(self.day, 'd F Y'))

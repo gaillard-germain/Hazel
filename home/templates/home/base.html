@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Hazel</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://kit.fontawesome.com/575962c641.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
@@ -17,7 +18,7 @@
         <a href="/#info">Info</a>
         <a href="/#agenda">Agenda</a>
         <a href="/#registration">Inscription</a>
-        <a href="{% url 'booking:calendar' %}">Réservation</a>
+        <a href="{% url 'booking:select_child' %}">Réservation</a>
         <a href="/#contact">Contact</a>
         {% if user.is_authenticated %}
         <div class="dropdown">
@@ -53,7 +54,5 @@
       <p>Copyright <i class="far fa-copyright"></i> Germain GAILLARD</p>
     </footer>
   </body>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="{% static 'home/js/scripts.js' %}"></script>
-  <script src="{% static 'registration/js/scripts.js' %}"></script>
 </html>

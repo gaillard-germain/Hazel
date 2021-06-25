@@ -88,7 +88,7 @@ class Family(models.Model):
     insurance_number = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return self.use_name
 
 
 class Child(models.Model):

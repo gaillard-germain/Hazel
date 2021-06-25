@@ -302,6 +302,31 @@ header {
   display: inline-block;
 }
 
+.block {
+  display: block;
+}
+
+.bg-lightblue {
+  background-color: var(--lightblue);
+}
+
+.bg-lightgrey {
+  background-color: var(--lightgrey);
+}
+
+.box-1 {
+  padding: 1em;
+  margin: 1em;
+}
+
+.box-row-wrap {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+
 section {
   text-align: center;
 }
@@ -387,7 +412,7 @@ section a:hover {
   margin: 2em 0;
 }
 
-#registration ul {
+.not-dotted {
   list-style-type: none;
   padding: 0;
 }
@@ -420,7 +445,6 @@ section a:hover {
 
 .info-box {
   padding: 1em;
-  background-color: var(--green);
 }
 
 .info-box h2 {
@@ -433,8 +457,22 @@ section a:hover {
   padding: 0.5em
 }
 
-.sub-box {
-  text-align: left;
+.options-box {
+  margin-bottom: 1em;
+  padding: 1em;
+}
+
+.option {
+  border-radius: 10px;
+  border: 1px solid grey;
+  background-color: var(--lightblue);
+  padding: 1em;
+  margin: 1em;
+}
+
+.option h4 {
+  margin: 0;
+  padding: 0.5em;
 }
 
 .calendar {
@@ -483,29 +521,39 @@ section a:hover {
   border-bottom: 1px solid white;
 }
 
-.calendar .months .month .weekdays .weekday .day {
+.calendar .months .month .weekdays .weekday .day-box {
   height: 4em;
   margin: 0.2em;
   padding-top: 0.7em;
 }
 
-.calendar .months .month .weekdays .weekday .day p {
+.calendar .months .month .weekdays .weekday .day {
   cursor: pointer;
   color: var(--darkgrey);
+  border: none;
   border-radius: 50%;
   width: 2.5em;
   height: 2.5em;
-  padding-top: 0.7em;
   margin: 0 auto;
+  background-color: transparent;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1em;
 }
 
-.calendar .months .month .weekdays .weekday .day p:hover {
+.calendar .months .month .weekdays .weekday .day:hover {
   background-color: rgba(255, 255, 255, 0.3);
   color: black;
   font-weight: bolder;
 }
 
+.full-day {
+  border: 2px solid white !important;
+}
 
+.half-day {
+  border: 2px dashed white !important;
+}
 
 footer {
   text-align: center;
