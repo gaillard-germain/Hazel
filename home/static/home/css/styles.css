@@ -480,8 +480,13 @@ section a:hover {
 }
 
 .calendar h2 {
+  cursor: pointer;
   padding: 0;
   margin: 0;
+}
+
+.calendar h2:hover {
+  color: var(--blue);
 }
 
 .calendar .months {
@@ -492,6 +497,7 @@ section a:hover {
 }
 
 .calendar .months .month {
+  display: none;
   padding: 0.5em;
   margin: 0.5em;
   background-image: linear-gradient(var(--orange), var(--darkorange));;
@@ -546,6 +552,10 @@ section a:hover {
   color: black;
   font-weight: bolder;
 }
+.calendar .months .month .weekdays .weekday .day:disabled {
+  color: lightgrey;
+}
+
 
 .full-day {
   border: 2px solid white !important;

@@ -42,3 +42,8 @@ $('.day').on('click', function(event) {
     $.fn.bookaDay(dayOption, day, slot);
   }
 });
+
+$('.calendar h2').on('click', function(event) {
+  var month = $(this).parent().find('.month');
+  month.toggle('slow')
+});

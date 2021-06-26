@@ -30,13 +30,17 @@
             {% for weekday, days in weekdays.items %}
               <div class="weekday">
                 <h4>{{ weekday }}</h4>
-                {% for day, status in days.items %}
+                {% for day, booking in days.items %}
                 <div class="day-box">
                   {% csrf_token %}
-                  {% if status == 'full' %}
-                  <button class="day full-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
-                  {% elif status == 'half' %}
-                  <button class="day half-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
+                  {% if booking %}
+                    {% if booking.validated %}
+                    <button class="day" value="{{ day|date:'c' }}" disabled>{{ day|date:'j' }}</button>
+                    {% elif booking.whole == True %}
+                    <button class="day full-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
+                    {% elif booking.whole == False %}
+                    <button class="day half-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
+                    {% endif %}
                   {% else %}
                   <button class="day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>
                   {% endif %}

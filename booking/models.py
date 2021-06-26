@@ -15,15 +15,6 @@ class Period(models.Model):
     def make_calendar(self, child):
         """ Returns a dict {month: {weekday: [date]}} of the period"""
 
-        booking_dict = {}
-        booking = Booking.objects.filter(child=child)
-        for obj in booking:
-            if obj.whole:
-                status = 'full'
-            else:
-                status = 'half'
-            booking_dict[obj.day] = status
-
         calendar = {}
         current = self.start_date + timedelta(days=1)
 
@@ -44,10 +35,11 @@ class Period(models.Model):
                 if weekday not in calendar[month]:
                     calendar[month][weekday] = {}
 
-                if current in booking_dict:
-                    calendar[month][weekday][current] = booking_dict[current]
+                try:
+                    booking = Booking.objects.get(day=current, child=child)
+                    calendar[month][weekday][current] = booking
 
-                else:
+                except Booking.DoesNotExist:
                     calendar[month][weekday][current] = None
 
             current += timedelta(days=1)
