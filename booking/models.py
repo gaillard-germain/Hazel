@@ -18,7 +18,7 @@ class Period(models.Model):
         calendar = {}
         current = self.start_date + timedelta(days=1)
 
-        if self.name == 'periscolaire':
+        if self.name == 'Périscolaire':
             excluded = [0, 1, 3, 4, 5, 6]
         else:
             excluded = [5, 6]
@@ -28,7 +28,7 @@ class Period(models.Model):
             month = _date(current, 'F Y')
             weekday = _date(current, 'D')
 
-            if current.weekday() not in excluded:
+            if current.weekday() not in excluded and current > date.today():
                 if month not in calendar:
                     calendar[month] = {}
 
