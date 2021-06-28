@@ -34,7 +34,9 @@
                 <div class="day-box">
                   {% csrf_token %}
                   {% if booking %}
-                    {% if booking.validated %}
+                    {% if booking == 'full' %}
+                    <button class="day" value="{{ day|date:'c' }}" disabled>{{ day|date:'j' }}</button>
+                    {% elif booking.validated %}
                     <button class="day" value="{{ day|date:'c' }}" disabled>{{ day|date:'j' }}</button>
                     {% elif booking.whole == True %}
                     <button class="day full-day" value="{{ day|date:'c' }}">{{ day|date:'j' }}</button>

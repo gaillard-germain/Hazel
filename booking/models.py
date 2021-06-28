@@ -36,10 +36,20 @@ class Period(models.Model):
                     calendar[month][weekday] = {}
 
                 try:
-                    booking = Booking.objects.get(day=current, child=child)
-                    calendar[month][weekday][current] = booking
+                    slot = Slot.objects.get(day=current)
 
-                except Booking.DoesNotExist:
+                    try:
+                        booking = Booking.objects.get(slot=slot, child=child)
+                        calendar[month][weekday][current] = booking
+
+                    except Booking.DoesNotExist:
+                        calendar[month][weekday][current] = None
+                        if slot.is_full:
+                            calendar[month][weekday][current] = 'full'
+                        else:
+                            calendar[month][weekday][current] = None
+
+                except Slot.DoesNotExist:
                     calendar[month][weekday][current] = None
 
             current += timedelta(days=1)
@@ -47,12 +57,21 @@ class Period(models.Model):
         return calendar
 
 
+class Slot(models.Model):
+    day = models.DateField()
+    is_full = models.BooleanField(default=False)
+
+    def __str__(self):
+        return _date(self.day, 'd F Y')
+
+
 class Booking(models.Model):
     child = models.ForeignKey(Child, related_name='booking',
                               on_delete=models.CASCADE)
-    day = models.DateField()
+    slot = models.ForeignKey(Slot, related_name='booking',
+                              on_delete=models.CASCADE)
     whole = models.BooleanField(default=True)
     validated = models.BooleanField(default=False)
 
     def __str__(self):
-        return '{} {}'.format(self.child, _date(self.day, 'd F Y'))
+        return '{} {}'.format(self.child, self.slot)

@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.http import Http404
 from datetime import date
 from registration.models import Family, Child
-from .models import Period, Booking
+from .models import Period, Booking, Slot
 
 
 class SelectChild(View):
@@ -48,9 +48,12 @@ class Modify(View):
 
         child = Child.objects.get(id=child_id)
 
+        slot, created = Slot.objects.get_or_create(
+            day=date.fromisoformat(day)
+        )
         booking, created = Booking.objects.get_or_create(
             child=child,
-            day=date.fromisoformat(day)
+            slot=slot
         )
 
         if day_option == 'cancel':
@@ -63,6 +66,17 @@ class Modify(View):
         elif day_option == 'half-day' and booking.whole != False:
             booking.whole = False
             booking.save()
+
+        booking_count = Booking.objects.filter(slot=slot).count()
+
+        if booking_count == 0:
+            slot.delete()
+        elif booking_count >= 60 and not slot.is_full:
+            slot.is_full = True
+            slot.save()
+        elif booking_count < 60 and slot.is_full:
+            slot.is_full = False
+            slot.save()
 
         return JsonResponse(response)
 
