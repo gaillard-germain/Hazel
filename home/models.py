@@ -48,6 +48,7 @@ class Agenda(models.Model):
 
         return agenda
 
+
 class Activity(models.Model):
     name = models.CharField(max_length=100)
     categories = models.ManyToManyField(Category, related_name='activities')

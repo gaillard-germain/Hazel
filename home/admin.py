@@ -6,7 +6,6 @@ admin.site.register(Price)
 admin.site.register(Category)
 
 
-
 class ActivityInLine(admin.TabularInline):
     model = Activity
     extra = 1

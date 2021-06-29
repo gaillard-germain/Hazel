@@ -17,7 +17,7 @@ class SelectChildPageTestCase(TestCase):
 
     def test_selectchild_page_returns_200(self):
         family = Family.objects.create(user=self.user)
-        child = Child.objects.create(family=family)
+        Child.objects.create(family=family)
         self.client.login(username=self.username, password=self.password)
 
         response = self.client.get(reverse('booking:select_child'))
@@ -34,7 +34,7 @@ class SelectChildPageTestCase(TestCase):
 
     def test_selectchild_page_redirect_if_no_child(self):
         self.client.login(username=self.username, password=self.password)
-        family = Family.objects.create(user=self.user)
+        Family.objects.create(user=self.user)
         response = self.client.get(reverse('booking:select_child'))
         self.assertEqual(response.status_code, 302)
 
@@ -72,7 +72,7 @@ class CalendarPageTestCase(TestCase):
 
     def test_calendar_page_returns_404_if_no_child(self):
         self.client.login(username=self.username, password=self.password)
-        family = Family.objects.create(user=self.user)
+        Family.objects.create(user=self.user)
         response = self.client.get(reverse('booking:calendar',
                                    args=("1")))
         self.assertEqual(response.status_code, 404)
@@ -80,7 +80,7 @@ class CalendarPageTestCase(TestCase):
     def test_calendar_page_returns_404_if_not_familys_child(self):
         self.client.login(username=self.username, password=self.password)
         family = Family.objects.create(user=self.user)
-        child = Child.objects.create(family=family)
+        Child.objects.create(family=family)
         response = self.client.get(reverse('booking:calendar',
                                    args=("2")))
         self.assertEqual(response.status_code, 404)
@@ -115,22 +115,22 @@ class MakeCalendarTestCase(TestCase):
         calendar = self.period.make_calendar(self.child)
 
         month = _date(self.t1, 'F Y')
-        weekday = _date(self.t1 , 'D')
+        weekday = _date(self.t1, 'D')
         day = self.t1
         self.assertEqual(calendar[month][weekday][day], booking)
 
     def test_calendar_dict_contains_none(self):
         calendar = self.period.make_calendar(self.child)
         month = _date(self.t1, 'F Y')
-        weekday = _date(self.t1 , 'D')
+        weekday = _date(self.t1, 'D')
         day = self.t1
         self.assertEqual(calendar[month][weekday][day], None)
 
     def test_calendar_dict_contains_full(self):
-        slot = Slot.objects.create(day=self.t1, is_full=True)
+        Slot.objects.create(day=self.t1, is_full=True)
         calendar = self.period.make_calendar(self.child)
         month = _date(self.t1, 'F Y')
-        weekday = _date(self.t1 , 'D')
+        weekday = _date(self.t1, 'D')
         day = self.t1
         self.assertEqual(calendar[month][weekday][day], 'full')
 
@@ -148,12 +148,12 @@ class ModifyViewTestCase(TestCase):
 
     def test_modifyview_cancels_booking_and_clears_slot(self):
         slot = Slot.objects.create(day=date.today())
-        booking = Booking.objects.create(slot=slot, child=self.child)
+        Booking.objects.create(slot=slot, child=self.child)
         bookings = Booking.objects.all()
         slots = Slot.objects.all()
         old_bookings = bookings.count()
         old_slots = slots.count()
-        response = self.client.post(reverse('booking:modify'), {
+        self.client.post(reverse('booking:modify'), {
             'child_id': self.child.id,
             'day_option': 'cancel',
             'day': slot.day.isoformat()
@@ -168,7 +168,7 @@ class ModifyViewTestCase(TestCase):
         slots = Slot.objects.all()
         old_booking = bookings.count()
         old_slots = slots.count()
-        response = self.client.post(reverse('booking:modify'), {
+        self.client.post(reverse('booking:modify'), {
             'child_id': self.child.id,
             'day_option': 'full-day',
             'day': date.today().isoformat()

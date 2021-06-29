@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from datetime import date, time
-from .models import Price, Activity, Agenda, Category
+from .models import Price, Agenda
 
 
 class Index(View):

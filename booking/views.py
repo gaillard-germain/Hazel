@@ -21,7 +21,7 @@ class SelectChild(View):
                 return redirect('registration:regfamily')
 
             try:
-                child = Child.objects.get(family=family)
+                Child.objects.get(family=family)
 
             except Child.DoesNotExist:
                 return redirect('registration:regchild_step1')
@@ -59,11 +59,11 @@ class Modify(View):
         if day_option == 'cancel':
             booking.delete()
 
-        elif day_option == 'full-day' and booking.whole != True:
+        elif day_option == 'full-day' and not booking.whole:
             booking.whole = True
             booking.save()
 
-        elif day_option == 'half-day' and booking.whole != False:
+        elif day_option == 'half-day' and booking.whole:
             booking.whole = False
             booking.save()
 

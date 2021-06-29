@@ -68,7 +68,7 @@ class Booking(models.Model):
     child = models.ForeignKey(Child, related_name='booking',
                               on_delete=models.CASCADE)
     slot = models.ForeignKey(Slot, related_name='booking',
-                              on_delete=models.CASCADE)
+                             on_delete=models.CASCADE)
     whole = models.BooleanField(default=True)
     validated = models.BooleanField(default=False)
 
