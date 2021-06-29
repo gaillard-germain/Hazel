@@ -43,7 +43,6 @@ class Period(models.Model):
                         calendar[month][weekday][current] = booking
 
                     except Booking.DoesNotExist:
-                        calendar[month][weekday][current] = None
                         if slot.is_full:
                             calendar[month][weekday][current] = 'full'
                         else:
