@@ -20,6 +20,9 @@ class Adult(models.Model):
     occupation = models.CharField(max_length=50, blank=True, null=True)
     job_phone = models.CharField(max_length=10, blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Adulte'
+
     def __str__(self):
         return '{} {}'.format(self.firstname, self.lastname)
 
@@ -87,6 +90,9 @@ class Family(models.Model):
     insurance_name = models.CharField(max_length=50)
     insurance_number = models.CharField(max_length=50)
 
+    class Meta:
+        verbose_name = 'Famille'
+
     def __str__(self):
         return self.use_name
 
@@ -110,6 +116,9 @@ class Child(models.Model):
         Adult, related_name='child_lg2',
         on_delete=models.SET_NULL, null=True
     )
+
+    class Meta:
+        verbose_name = 'Enfant'
 
     def __str__(self):
         return '{} {}'.format(self.firstname, self.lastname)

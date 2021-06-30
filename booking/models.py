@@ -9,6 +9,9 @@ class Period(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    class Meta:
+        verbose_name = 'Période'
+
     def __str__(self):
         return self.name
 
@@ -60,6 +63,11 @@ class Slot(models.Model):
     day = models.DateField()
     is_full = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['day']
+        verbose_name = 'Créneau'
+        verbose_name_plural = 'Créneaux'
+
     def __str__(self):
         return _date(self.day, 'd F Y')
 
@@ -71,6 +79,9 @@ class Booking(models.Model):
                              on_delete=models.CASCADE)
     whole = models.BooleanField(default=True)
     validated = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'Réservation'
 
     def __str__(self):
         return '{} {}'.format(self.child, self.slot)

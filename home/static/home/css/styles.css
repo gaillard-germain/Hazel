@@ -377,7 +377,7 @@ section a:hover {
 }
 
 #agenda .card {
-  width: 8em;
+  width: 10em;
   border-radius: 10px 10px 0 0;
   margin: 0.2em;
   display: flex;

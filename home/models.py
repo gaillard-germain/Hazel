@@ -10,6 +10,7 @@ class Price(models.Model):
 
     class Meta:
         ordering = ['day']
+        verbose_name = 'Tarif'
 
     def __str__(self):
         return 'Quotient familial {}'.format(self.family_quotient)
@@ -18,6 +19,9 @@ class Price(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Catégorie'
 
     def __str__(self):
         return self.name
@@ -28,6 +32,8 @@ class Agenda(models.Model):
 
     class Meta:
         ordering = ['entry']
+        verbose_name = "Entrée de l'agenda"
+        verbose_name_plural = "Entrées de l'agenda"
 
     def __str__(self):
         return _date(self.entry, 'D d F Y')
@@ -59,6 +65,7 @@ class Activity(models.Model):
 
     class Meta:
         ordering = ['start_time']
+        verbose_name = 'Activité'
 
     def __str__(self):
         return self.name
