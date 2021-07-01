@@ -2,10 +2,14 @@
 {% load static %}
   {% block content %}
   <div class="bg-fixed">
+    {% if not modify %}
     <h1 class="section-title top-offset">CREER UNE FAMILLE</h1>
     <div class="msg-box">
       <h2>Merci de remplir ce formulaire pour finaliser la création de votre compte</h2>
     </div>
+    {% else %}
+    <h1 class="section-title top-offset">MODIFIER INFORMATIONS FAMILLE</h1>
+    {% endif %}
     <div class="form-box">
       <form method="post">
         {% csrf_token %}
@@ -36,7 +40,13 @@
             </label>
           </div>
         </div>
-        <button id="register-family" class="form-button" type="submit" disabled>S'inscrire</button>
+        <button id="register-family" class="form-button" type="submit" disabled>
+          {% if modify %}
+          Enregistrer
+          {% else %}
+          S'inscrire
+          {% endif %}
+        </button>
       </form>
     </div>
   </div>

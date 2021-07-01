@@ -3,6 +3,7 @@ from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
 from django.http import Http404
+from django.forms.models import model_to_dict
 from .forms import (SignUpForm, FamilyForm, ChildForm, AuthorizedPersonForm,
                     ParentalAuthorizationForm, DoctorForm)
 from .models import User, Family, Child, Adult
@@ -70,6 +71,43 @@ class RegFamily(View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class ModFamily(RegFamily):
+
+    def post(self, request, *args, **kwargs):
+
+        user = User.objects.get(id=request.user.id)
+        family = Family.objects.get(user=user)
+        doctor = Adult.objects.get(id=family.doctor.id)
+        family_data = model_to_dict(family)
+        doctor_data = model_to_dict(doctor)
+
+        family_form = self.family_form_class(request.POST or None,
+                                             initial=family_data)
+        doctor_form = self.doctor_form_class(request.POST or None,
+                                             initial=doctor_data)
+
+        if family_form.is_valid() and doctor_form.is_valid():
+            id = family.id
+            family = family_form.save(commit=False)
+            family.id = id
+            family.use_name = family_form.cleaned_data.get('use_name').upper()
+            family.home_address = family_form.cleaned_data.get(
+                'home_address').upper()
+            family.user = user
+            family.doctor = Adult.create_doc(doctor_form)
+            family.save()
+            return redirect('registration:myaccount')
+
+        context = {
+            'modify': True,
+            'family_form': family_form,
+            'doctor_form': doctor_form
+        }
+
+        return render(request, self.template_name, context)
+
 
 
 class ManageAccount(View):

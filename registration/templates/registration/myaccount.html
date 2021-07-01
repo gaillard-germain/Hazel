@@ -43,12 +43,15 @@
           <td>{{ family.doctor }}</td>
         </tr>
       </table>
+      <div class="box-1">
+        <a class="form-button" href="{% url 'registration:modfamily' %}"><i class="fas fa-pencil-alt"></i> Modifier</a>
+      </div>
       <h2>Enfants inscris</h2>
       <table>
         {% for child in children %}
         <tr>
           <td>{{ child.firstname }} {{ child.lastname }}</td>
-          <td><a class="form-button" href="{% url 'booking:calendar' child_id=child.id %}">Réservation</a></td>
+          <td><a class="form-button text-small" href="{% url 'booking:calendar' child_id=child.id %}">Réservation</a></td>
         </tr>
         {% endfor %}
       </table>
