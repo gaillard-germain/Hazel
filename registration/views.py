@@ -40,19 +40,35 @@ class SignUp(View):
 
 class RegFamily(View):
 
+    modify = False
     family_form_class = FamilyForm
     doctor_form_class = DoctorForm
     template_name = 'registration/regfamily.html'
 
     def post(self, request, *args, **kwargs):
+        user = User.objects.get(id=request.user.id)
 
-        family_form = self.family_form_class(request.POST or None)
-        doctor_form = self.doctor_form_class(request.POST or None)
+        if self.modify:
+            old_family = Family.objects.get(user=user)
+            old_doctor = Adult.objects.get(id=old_family.doctor.id)
+            family_form = self.family_form_class(
+                request.POST or None,
+                initial=model_to_dict(old_family)
+            )
+            doctor_form = self.doctor_form_class(
+                request.POST or None,
+                initial=model_to_dict(old_doctor)
+            )
+
+        else:
+            family_form = self.family_form_class(request.POST or None)
+            doctor_form = self.doctor_form_class(request.POST or None)
 
         if family_form.is_valid() and doctor_form.is_valid():
-            user = User.objects.get(id=request.user.id)
-
             family = family_form.save(commit=False)
+            if self.modify:
+                family.id = old_family.id
+
             family.use_name = family_form.cleaned_data.get('use_name').upper()
             family.home_address = family_form.cleaned_data.get(
                 'home_address').upper()
@@ -63,6 +79,7 @@ class RegFamily(View):
             return redirect('registration:myaccount')
 
         context = {
+            'modify': self.modify,
             'family_form': family_form,
             'doctor_form': doctor_form
         }
@@ -71,43 +88,6 @@ class RegFamily(View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
-
-
-class ModFamily(RegFamily):
-
-    def post(self, request, *args, **kwargs):
-
-        user = User.objects.get(id=request.user.id)
-        family = Family.objects.get(user=user)
-        doctor = Adult.objects.get(id=family.doctor.id)
-        family_data = model_to_dict(family)
-        doctor_data = model_to_dict(doctor)
-
-        family_form = self.family_form_class(request.POST or None,
-                                             initial=family_data)
-        doctor_form = self.doctor_form_class(request.POST or None,
-                                             initial=doctor_data)
-
-        if family_form.is_valid() and doctor_form.is_valid():
-            id = family.id
-            family = family_form.save(commit=False)
-            family.id = id
-            family.use_name = family_form.cleaned_data.get('use_name').upper()
-            family.home_address = family_form.cleaned_data.get(
-                'home_address').upper()
-            family.user = user
-            family.doctor = Adult.create_doc(doctor_form)
-            family.save()
-            return redirect('registration:myaccount')
-
-        context = {
-            'modify': True,
-            'family_form': family_form,
-            'doctor_form': doctor_form
-        }
-
-        return render(request, self.template_name, context)
-
 
 
 class ManageAccount(View):

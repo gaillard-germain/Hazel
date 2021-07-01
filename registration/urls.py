@@ -48,5 +48,7 @@ urlpatterns = [
     path('regchild_step4', views.RegChildFinal.as_view(),
          name='regchild_step4'),
     path('regperson', views.RegPerson.as_view(), name='regperson'),
-    path('modfamily', views.ModFamily.as_view(), name='modfamily'),
+    path('modfamily', views.RegFamily.as_view(
+        modify = True
+    ), name='modfamily'),
 ]
