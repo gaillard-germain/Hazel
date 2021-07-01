@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import Group
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.forms.models import model_to_dict
 from .forms import (SignUpForm, FamilyForm, ChildForm, AuthorizedPersonForm,
                     ParentalAuthorizationForm, DoctorForm)
@@ -195,3 +195,32 @@ class RegPerson(View):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class DeleteThis(View):
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        family = Family.objects.get(user=request.user.id)
+        this_kind = request.POST.get('this_kind')
+        this_id = request.POST.get('this_id')
+
+        if this_kind == 'child':
+            try:
+                Child.objects.get(id=this_id).delete()
+                response['status'] = 'OK'
+
+            except Child.DoesNotExist:
+                raise Http404()
+
+        elif this_kind == 'adult':
+            try:
+                person = Adult.objects.get(id=this_id)
+                family.authorized_person.remove(person)
+                response['status'] = 'OK'
+
+            except Adult.DoesNotExist:
+                raise Http404()
+
+        return JsonResponse(response)

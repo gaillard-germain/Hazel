@@ -10,65 +10,77 @@
     <hr class="separator">
     <div class="info-box bg-lightblue">
       <h2>Utilisateur</h2>
-      <table>
-        <tr>
-          <td>Nom d'utilisateur:</td>
-          <td>{{ user.username }}</td>
-        </tr>
-        <tr>
-          <td>E-mail:</td>
-          <td>{{ user.email }}</td>
-        </tr>
-      </table>
+      <div class="box-1 rounded-borders">
+        <table>
+          <tr>
+            <td>Nom d'utilisateur:</td>
+            <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+            <td>E-mail:</td>
+            <td>{{ user.email }}</td>
+          </tr>
+        </table>
+      </div>
       <h2>Famille</h2>
-      <table>
-        <tr>
-          <td>Nom d'usage:</td>
-          <td>{{ family.use_name }}</td>
-        </tr>
-        <tr>
-          <td>Adresse:</td>
-          <td>{{ family.home_address }}</td>
-        </tr>
-        <tr>
-          <td>Téléphone(domicile):</td>
-          <td>{{ family.home_phone }}</td>
-        </tr>
-        <tr>
-          <td>Régime d'appartenance:</td>
-          <td>{{ family.plan }}</td>
-        </tr>
-        <tr>
-          <td>Médecin traitant:</td>
-          <td>{{ family.doctor }}</td>
-        </tr>
-      </table>
-      <div class="box-1">
-        <a class="form-button" href="{% url 'registration:modfamily' %}"><i class="fas fa-pencil-alt"></i> Modifier</a>
+      <div class="box-1 rounded-borders">
+        <table>
+          <tr>
+            <td>Nom d'usage:</td>
+            <td>{{ family.use_name }}</td>
+          </tr>
+          <tr>
+            <td>Adresse:</td>
+            <td>{{ family.home_address }}</td>
+          </tr>
+          <tr>
+            <td>Téléphone(domicile):</td>
+            <td>{{ family.home_phone }}</td>
+          </tr>
+          <tr>
+            <td>Régime d'appartenance:</td>
+            <td>{{ family.plan }}</td>
+          </tr>
+          <tr>
+            <td>Médecin traitant:</td>
+            <td>{{ family.doctor }}</td>
+          </tr>
+        </table>
+        <div class="box-1">
+          <a class="form-button" href="{% url 'registration:modfamily' %}"><i class="fas fa-pencil-alt"></i> Modifier</a>
+        </div>
       </div>
       <h2>Enfants inscris</h2>
-      <table>
+      <div class="box-1 rounded-borders">
+        <table>
+        {% csrf_token %}
         {% for child in children %}
         <tr>
           <td>{{ child.firstname }} {{ child.lastname }}</td>
-          <td><a class="form-button text-small" href="{% url 'booking:calendar' child_id=child.id %}">Réservation</a></td>
+          <td><a class="table-button" href="{% url 'booking:calendar' child_id=child.id %}"><i class="far fa-calendar-plus"></i> Réservation</a></td>
+          <td><button class="table-button child" type="button" onclick="deleteThis(this)" value="{{ child.id }}"><i class="far fa-trash-alt"></i> Suppression</button></td>
         </tr>
         {% endfor %}
       </table>
       <div class="box-1">
         <a class="form-button" href="{% url 'registration:regchild_step1' %}"><i class="fas fa-plus"></i> Ajouter un enfant</a>
       </div>
+      </div>
     <h2>Autres personnes autorisées à récupérer les enfants</h2>
-    <table>
-      {% for person in authorized_persons %}
-      <tr>
-        <td>{{ person }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-    <div class="box-1">
-      <a class="form-button" href="{% url 'registration:regperson' %}"><i class="fas fa-plus"></i> Ajouter une personne</a>
+    <div class="box-1 rounded-borders">
+      <table>
+        {% for person in authorized_persons %}
+        <tr>
+          <td>{{ person.firstname }} {{ person.lastname }}</td>
+          <td><button class="table-button adult" type="button" onclick="deleteThis(this)" value="{{ person.id }}"><i class="far fa-trash-alt"></i> Suppression</button></td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div class="box-1">
+        <a class="form-button" href="{% url 'registration:regperson' %}"><i class="fas fa-plus"></i> Ajouter une personne</a>
+      </div>
     </div>
   </div>
   </section>
+  <script src="{% static 'registration/js/scripts.js' %}"></script>
   {% endblock %}

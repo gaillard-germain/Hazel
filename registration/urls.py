@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.contrib.auth import views as auth_views
 from . import views
 from .forms import LegalGuardianForm
@@ -51,4 +51,5 @@ urlpatterns = [
     path('modfamily', views.RegFamily.as_view(
         modify = True
     ), name='modfamily'),
+    path('delete_this', views.DeleteThis.as_view(), name='delete_this'),
 ]
