@@ -208,7 +208,6 @@ class DeleteThisTestCase(TestCase):
         self.person = Adult.objects.create()
         self.family.authorized_person.add(self.person)
 
-
     def test_deletethis_delete_child(self):
         old_children = Child.objects.all().count()
         self.client.post(reverse('registration:delete_this'),
