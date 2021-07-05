@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_nose',
     'home.apps.HomeConfig',
     'registration.apps.RegistrationConfig',
     'booking.apps.BookingConfig',
@@ -138,3 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_REDIRECT_URL = '/'
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=home,registration,booking',
+    '--cover-html',
+]

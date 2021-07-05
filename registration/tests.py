@@ -192,3 +192,48 @@ class RegPersonPageTestCase(TestCase):
         self.client.post(reverse('registration:regperson'), self.form)
         new_persons = persons.count()
         self.assertEqual(new_persons, old_persons+1)
+
+
+class DeleteThisTestCase(TestCase):
+
+    def setUp(self):
+        self.username = 'Fake-User'
+        self.email = 'fake.user@foo.bar'
+        self.password = 'F4K3u53r'
+        self.user = User.objects.create_user(self.username, self.email,
+                                             self.password)
+        self.client.login(username=self.username, password=self.password)
+        self.family = Family.objects.create(user=self.user)
+        self.child = Child.objects.create(family=self.family)
+        self.person = Adult.objects.create()
+        self.family.authorized_person.add(self.person)
+
+
+    def test_deletethis_delete_child(self):
+        old_children = Child.objects.all().count()
+        self.client.post(reverse('registration:delete_this'),
+                         {'this_kind': 'child', 'this_id': self.child.id})
+        new_children = Child.objects.all().count()
+        self.assertEqual(new_children, old_children - 1)
+
+    def test_deletethis_remove_authorized_person(self):
+        family_friends = Adult.objects.filter(family_friends=self.family.id)
+        old_family_friends = family_friends.count()
+        self.client.post(reverse('registration:delete_this'),
+                         {'this_kind': 'adult', 'this_id': self.person.id})
+        new_family_friends = family_friends.count()
+        self.assertEqual(new_family_friends, old_family_friends - 1)
+
+    def test_deletethis_raise_404_if_nochild(self):
+        response = self.client.post(
+            reverse('registration:delete_this'),
+            {'this_kind': 'child', 'this_id': '10'}
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_deletethis_raise_404_if_noperson(self):
+        response = self.client.post(
+            reverse('registration:delete_this'),
+            {'this_kind': 'adult', 'this_id': '10'}
+        )
+        self.assertEqual(response.status_code, 404)
