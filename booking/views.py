@@ -43,7 +43,7 @@ class Modify(View):
         response = {}
 
         child_id = request.POST.get('child_id')
-        day_option = request.POST.get('day_option')
+        command = request.POST.get('command')
         day = request.POST.get('day')
 
         child = Child.objects.get(id=child_id)
@@ -56,27 +56,19 @@ class Modify(View):
             slot=slot
         )
 
-        if day_option == 'cancel':
-            booking.delete()
+        booking.update_booking(command)
+        # if day_option == 'cancel':
+        #     booking.delete()
+        #
+        # elif day_option == 'full-day' and not booking.whole:
+        #     booking.whole = True
+        #     booking.save()
+        #
+        # elif day_option == 'half-day' and booking.whole:
+        #     booking.whole = False
+        #     booking.save()
 
-        elif day_option == 'full-day' and not booking.whole:
-            booking.whole = True
-            booking.save()
-
-        elif day_option == 'half-day' and booking.whole:
-            booking.whole = False
-            booking.save()
-
-        booking_count = Booking.objects.filter(slot=slot).count()
-
-        if booking_count == 0:
-            slot.delete()
-        elif booking_count >= 60 and not slot.is_full:
-            slot.is_full = True
-            slot.save()
-        elif booking_count < 60 and slot.is_full:
-            slot.is_full = False
-            slot.save()
+        slot.update_slot()
 
         return JsonResponse(response)
 

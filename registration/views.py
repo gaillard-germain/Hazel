@@ -7,6 +7,7 @@ from django.forms.models import model_to_dict
 from .forms import (SignUpForm, FamilyForm, ChildForm, AuthorizedPersonForm,
                     ParentalAuthorizationForm, DoctorForm)
 from .models import User, Family, Child, Adult
+from booking.models import Booking, Slot
 
 
 class SignUp(View):
@@ -208,7 +209,13 @@ class DeleteThis(View):
 
         if this_kind == 'child':
             try:
-                Child.objects.get(id=this_id).delete()
+                child = Child.objects.get(id=this_id)
+                bookings = Booking.objects.filter(child=child.id)
+                for booking in bookings:
+                    slot = Slot.objects.get(booking=booking.id)
+                    booking.delete()
+                    slot.update_slot()
+                child.delete()
                 response['status'] = 'OK'
 
             except Child.DoesNotExist:

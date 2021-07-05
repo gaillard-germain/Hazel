@@ -71,6 +71,18 @@ class Slot(models.Model):
     def __str__(self):
         return _date(self.day, 'd F Y')
 
+    def update_slot(self):
+        booking_count = Booking.objects.filter(slot=self).count()
+
+        if booking_count == 0:
+            self.delete()
+        elif booking_count >= 60 and not self.is_full:
+            self.is_full = True
+            self.save()
+        elif booking_count < 60 and self.is_full:
+            self.is_full = False
+            self.save()
+
 
 class Booking(models.Model):
     child = models.ForeignKey(Child, related_name='booking',
@@ -85,3 +97,15 @@ class Booking(models.Model):
 
     def __str__(self):
         return '{} {}'.format(self.child, self.slot)
+
+    def update_booking(self, command):
+        if command == 'cancel':
+            self.delete()
+
+        elif command == 'full-day' and not self.whole:
+            self.whole = True
+            self.save()
+
+        elif command == 'half-day' and self.whole:
+            self.whole = False
+            self.save()

@@ -155,7 +155,7 @@ class ModifyViewTestCase(TestCase):
         old_slots = slots.count()
         self.client.post(reverse('booking:modify'), {
             'child_id': self.child.id,
-            'day_option': 'cancel',
+            'command': 'cancel',
             'day': slot.day.isoformat()
         })
         new_bookings = bookings.count()

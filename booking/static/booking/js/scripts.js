@@ -1,7 +1,7 @@
 let csrfToken = $("[name=csrfmiddlewaretoken]").val();
 
 
-$.fn.bookaDay = function(dayOption, day, slot) {
+$.fn.bookaDay = function(command, day, slot) {
   $.ajax({
     url: '/booking/modify',
     headers: {
@@ -9,19 +9,19 @@ $.fn.bookaDay = function(dayOption, day, slot) {
          },
     data: {
       child_id: childId,
-      day_option: dayOption,
+      command: command,
       day: day
     },
     type: 'POST'
   })
   .done(function(response) {
-    if (dayOption === "full-day") {
+    if (command === "full-day") {
       $(slot).removeClass("half-day");
       $(slot).addClass("full-day");
-    } else if (dayOption === "half-day") {
+    } else if (command === "half-day") {
       $(slot).removeClass("full-day");
       $(slot).addClass("half-day");
-    } else if (dayOption === "cancel") {
+    } else if (command === "cancel") {
       $(slot).removeClass("half-day full-day");
     }
     if (response['msg']) {
@@ -34,12 +34,12 @@ $.fn.bookaDay = function(dayOption, day, slot) {
 $('.day').on('click', function(event) {
   var slot = $(this)
   var day = $(this).val();
-  var dayOption = $('input[name="day-option"]:checked').val();
+  var command = $('input[name="day-option"]:checked').val();
 
-  if (dayOption === undefined) {
+  if (command === undefined) {
     alert('Sélectionnez Journée ou Demi-journée pour réserver une date. Ou Annuler pour annuler une réservation')
   } else {
-    $.fn.bookaDay(dayOption, day, slot);
+    $.fn.bookaDay(command, day, slot);
   }
 });
 
