@@ -20,13 +20,10 @@ class SelectChild(View):
             except Family.DoesNotExist:
                 return redirect('registration:regfamily')
 
-            try:
-                Child.objects.get(family=family)
-
-            except Child.DoesNotExist:
-                return redirect('registration:regchild_step1')
-
             children = Child.objects.filter(family=family)
+
+            if not children.count():
+                return redirect('registration:regchild_step1')
 
             context = {'children': children}
 
@@ -57,17 +54,6 @@ class Modify(View):
         )
 
         booking.update_booking(command)
-        # if day_option == 'cancel':
-        #     booking.delete()
-        #
-        # elif day_option == 'full-day' and not booking.whole:
-        #     booking.whole = True
-        #     booking.save()
-        #
-        # elif day_option == 'half-day' and booking.whole:
-        #     booking.whole = False
-        #     booking.save()
-
         slot.update_slot()
 
         return JsonResponse(response)

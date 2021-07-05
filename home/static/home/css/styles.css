@@ -503,6 +503,11 @@ section a:hover {
   padding: 0.5em;
 }
 
+.option table {
+  margin: 0 auto;
+  border-spacing: 1em;
+}
+
 .calendar {
 
 }
@@ -561,7 +566,7 @@ section a:hover {
   padding-top: 0.7em;
 }
 
-.calendar .months .month .weekdays .weekday .day {
+.day {
   cursor: pointer;
   color: var(--darkgrey);
   border: none;

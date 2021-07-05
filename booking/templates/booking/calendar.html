@@ -8,15 +8,29 @@
       </div>
       <h1 class="section-title">RESERVATION</h1>
       <hr class="separator">
+      <h2>{{ child.firstname }}</h2>
       <div class="options-box">
         <div class="option">
-          <h4>Choisissez journée complète ou demi-journée</h4>
-          <input id="full-day" type="radio" name="day-option" value="full-day">
-          <label for="full-day">Journée</label>
-          <input id="half-day" type="radio" name="day-option" value="half-day">
-          <label for="half-day">Demi-journée</label>
-          <input id="cancel" type="radio" name="day-option" value="cancel">
-          <label for="cancel">Annuler</label>
+          <h4>Sélectionnez une période</h4>
+          <h4>Puis choisissez Journée complète ou Demi-journée</h4>
+          <h4>Ou Annuler pour annuler une réservation</h4>
+          <table>
+            <tr>
+              <td><input id="full-day" type="radio" name="day-option" value="full-day"></td>
+              <td><label for="full-day">Journée</label></td>
+              <td class="day full-day"> </td>
+            </tr>
+            <tr>
+              <td><input id="half-day" type="radio" name="day-option" value="half-day"></td>
+              <td><label for="half-day">Demi-journée</label></td>
+              <td class="day half-day"> </td>
+            </tr>
+            <tr>
+              <td><input id="cancel" type="radio" name="day-option" value="cancel"></td>
+              <td><label for="cancel">Annuler</label></td>
+              <td class="day"><i class="fas fa-times fa-2x"></i></td>
+            </tr>
+          </table>
         </div>
       </div>
       {% for calendar, months in calendars.items %}
