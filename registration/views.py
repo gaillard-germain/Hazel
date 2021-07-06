@@ -123,8 +123,12 @@ class RegChild(View):
     step = 1
 
     def post(self, request, *args, **kwargs):
+        if request.session.get(self.session_key):
+            data = request.session[self.session_key]
+        else:
+            data = None
 
-        form = self.form_class(request.POST or None)
+        form = self.form_class(request.POST or None, initial=data)
 
         if form.is_valid():
             request.session[self.session_key] = form.cleaned_data
