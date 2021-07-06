@@ -37,13 +37,26 @@ $('.day').on('click', function(event) {
   var command = $('input[name="day-option"]:checked').val();
 
   if (command === undefined) {
-    alert('Sélectionnez Journée ou Demi-journée pour réserver une date. Ou Annuler pour annuler une réservation')
+    alert("Dans l'onglet de gauche, sélectionnez Journée ou Demi-journée \
+pour réserver une date. Ou Annuler pour annuler une réservation")
   } else {
     $.fn.bookaDay(command, day, slot);
   }
 });
 
+
 $('.calendar h2').on('click', function(event) {
   var month = $(this).parent().find('.month');
   month.toggle('slow')
+});
+
+
+$('.arrow').on('click', function(event) {
+  $('.option').toggle('medium', function() {
+    if ($('.option').is(":hidden")) {
+      $('.arrow').html('<i class="fas fa-chevron-right fa-2x"></i>');
+    } else {
+      $('.arrow').html('<i class="fas fa-chevron-left fa-2x"></i>');
+    }
+  });
 });

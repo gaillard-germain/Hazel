@@ -9,7 +9,7 @@
       <h1 class="section-title">RESERVATION</h1>
       <hr class="separator">
       <div class="box-row-wrap">
-        <div class="box-1 bg-lightblue">
+        <div class="box-1 bg-lightblue rounded-borders">
           <h4>Sélectionner un enfant dans la liste ci-dessous:</h4>
         <ul class="not-dotted">
           {% for child in children %}
@@ -17,11 +17,10 @@
           {% endfor %}
         </ul>
         </div>
-        <div class="box-1 bg-lightgrey">
+        <div class="box-1 bg-lightgrey rounded-borders">
           <h4>Vous souhaitez inscrire un autre enfant?</h4>
           <a class="form-button block" href="{% url 'registration:regchild_step1' %}">Ajouter un enfant</a>
         </div>
       </div>
-
     </section>
   {% endblock %}

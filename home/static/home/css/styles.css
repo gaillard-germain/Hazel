@@ -12,6 +12,7 @@
   --lightgrey: #ececec;
   --darkgrey: #414141;
   --warning: #e26908;
+  --glass: rgba(197, 220, 234, 0.8);
 }
 
 *,
@@ -346,7 +347,6 @@ section {
 }
 
 section a {
-  text-decoration: none;
   font-weight: bold;
   color: var(--darkblue);
 }
@@ -495,16 +495,28 @@ section a:hover {
 }
 
 .options-box {
-  margin-bottom: 1em;
-  padding: 1em;
+  display: flex;
+  align-items: center;
+  top: 25em;
+  left: 0;
+  border-radius: 0 10px 10px 0;
+  border: 1px solid grey;
+  border-left: none;
+  background-color: var(--glass);
+  position: fixed;
+  height: 15em;
+}
+
+.arrow {
+  display: inline-block;
+  color: white;
+  padding: 0 0.5em;
 }
 
 .option {
-  border-radius: 10px;
-  border: 1px solid grey;
-  background-color: var(--lightblue);
+  display: none;
   padding: 1em;
-  margin: 1em;
+  margin: 0;
 }
 
 .option h4 {

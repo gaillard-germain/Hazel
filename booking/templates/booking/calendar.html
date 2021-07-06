@@ -7,13 +7,16 @@
         <i class="far fa-calendar-alt fa-2x"></i>
       </div>
       <h1 class="section-title">RESERVATION</h1>
-      <hr class="separator">
       <h2>{{ child.firstname }}</h2>
+      <hr class="separator">
+      <div class="instruction box-1">
+        <p>Choississez une période dans la liste ci-dessous, puis marquez les jours à réserver</p>
+        <p>à l'aide des marqueurs disponibles dans l'onglet de gauche.</p>
+        <p class="text-small">Sélectionnez "Annuler" pour annuler une réservation</p>
+      </div>
       <div class="options-box">
         <div class="option">
-          <h4>Sélectionnez une période</h4>
-          <h4>Puis choisissez Journée complète ou Demi-journée</h4>
-          <h4>Ou Annuler pour annuler une réservation</h4>
+          <h4>Marqueurs</h4>
           <table>
             <tr>
               <td><input id="full-day" type="radio" name="day-option" value="full-day"></td>
@@ -28,9 +31,12 @@
             <tr>
               <td><input id="cancel" type="radio" name="day-option" value="cancel"></td>
               <td><label for="cancel">Annuler</label></td>
-              <td class="day"><i class="fas fa-times fa-2x"></i></td>
+              <td class="day"><i class="fas fa-times fa-2x" style="color: red"></i></td>
             </tr>
           </table>
+        </div>
+        <div class="arrow">
+          <i class="fas fa-chevron-right fa-2x"></i>
         </div>
       </div>
       {% for calendar, months in calendars.items %}
