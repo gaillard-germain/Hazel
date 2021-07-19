@@ -12,7 +12,6 @@
         <hr class="separator">
         {% if step > 1 %}
         <a class="clean-a form-button" href="regchild_step{{ step|add:'-1' }}"><i class="fas fa-arrow-left"></i> Précédent</a>
-        <!-- <button class="form-button" type="button" onClick="history.back()"><i class="fas fa-arrow-left"></i> Précédent</button> -->
         {% endif %}
         {% if step > 0 and step < 4 %}
         <button class="form-button" type="submit">Suivant <i class="fas fa-arrow-right"></i></button>

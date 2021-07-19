@@ -7,9 +7,10 @@ admin.site.register(Booking)
 
 class BookingInLine(admin.TabularInline):
     model = Booking
-    extra = 1
+    extra = 0
 
 
 @admin.register(Slot)
-class lotAdmin(admin.ModelAdmin):
+class SlotAdmin(admin.ModelAdmin):
+    readonly_fields = ('day', 'is_full',)
     inlines = [BookingInLine, ]

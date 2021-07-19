@@ -101,7 +101,7 @@ class Child(models.Model):
     family = models.ForeignKey(Family, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=50)
     lastname = models.CharField(max_length=50)
-    birth_date = models.CharField(max_length=20)
+    birth_date = models.DateField()
     grade = models.CharField(max_length=10, blank=True, null=True)
     school = models.CharField(max_length=50, blank=True, null=True)
     info = models.TextField(blank=True, null=True)
@@ -129,7 +129,7 @@ class Child(models.Model):
             family=family,
             firstname=session_dict['firstname'].title(),
             lastname=session_dict['lastname'].upper(),
-            birth_date=session_dict['birth_date']
+            birth_date=date.fromisoformat(session_dict['birth_date'])
         )
 
         child.grade = session_dict['grade']
@@ -142,5 +142,5 @@ class Child(models.Model):
     @classmethod
     def get_age(cls):
         return int(
-            (date.today() - date.fromisoformat(cls.birth_date)).days/365.2425
+            (date.today() - cls.birth_date).days/365.2425
         )

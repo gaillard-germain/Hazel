@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .models import User, Family, Adult, Child
+from datetime import date
 
 
 class SignUpForm(UserCreationForm):
@@ -49,7 +50,9 @@ class ChildForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['birth_date'].widget.input_type = 'date'
+        self.fields['birth_date'].widget = forms.SelectDateWidget(
+            years=range(2000, date.today().year)
+        )
 
     class Meta:
         model = Child

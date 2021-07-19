@@ -8,6 +8,7 @@ from .forms import (SignUpForm, FamilyForm, ChildForm, AuthorizedPersonForm,
                     ParentalAuthorizationForm, DoctorForm)
 from .models import User, Family, Child, Adult
 from booking.models import Booking, Slot
+from datetime import date
 
 
 class SignUp(View):
@@ -131,6 +132,10 @@ class RegChild(View):
         form = self.form_class(request.POST or None, initial=data)
 
         if form.is_valid():
+            birth_date = form.cleaned_data.get('birth_date')
+            if birth_date:
+                form.cleaned_data['birth_date'] = date.isoformat(birth_date)
+
             request.session[self.session_key] = form.cleaned_data
             return redirect('registration:regchild_step{}'.format(self.step+1))
 

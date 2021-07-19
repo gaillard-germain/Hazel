@@ -60,8 +60,8 @@ class Period(models.Model):
 
 
 class Slot(models.Model):
-    day = models.DateField()
-    is_full = models.BooleanField(default=False)
+    day = models.DateField(verbose_name='Date')
+    is_full = models.BooleanField(default=False, verbose_name='Complet')
 
     class Meta:
         ordering = ['day']
@@ -86,11 +86,11 @@ class Slot(models.Model):
 
 class Booking(models.Model):
     child = models.ForeignKey(Child, related_name='booking',
-                              on_delete=models.CASCADE)
+                              on_delete=models.CASCADE, verbose_name='Enfant')
     slot = models.ForeignKey(Slot, related_name='booking',
                              on_delete=models.CASCADE)
-    whole = models.BooleanField(default=True)
-    validated = models.BooleanField(default=False)
+    whole = models.BooleanField(default=True, verbose_name='Journée complète')
+    validated = models.BooleanField(default=False, verbose_name='Validé')
 
     class Meta:
         verbose_name = 'Réservation'
