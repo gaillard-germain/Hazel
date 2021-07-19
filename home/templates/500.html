@@ -1,0 +1,10 @@
+{% extends 'home/base.html' %}
+{% load static %}
+  {% block content %}
+  <div class="intro" style="background-image: url({% static 'home/img/404.jpg' %})">
+    <div class="top-offset msg-box">
+      <h1>Désolé !</h1>
+      <h2>Une erreur c'est produite, merci de contacter l'administrateur du site.</h2>
+    </div>
+  </div>
+  {% endblock %}

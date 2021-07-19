@@ -205,8 +205,7 @@ header {
 
 .msg-box {
   background-color: rgba(0, 0, 0, 0.5);
-  color: var(--warning);
-  padding: 0.5em;
+  padding: 1em;
 }
 
 .form-box {
