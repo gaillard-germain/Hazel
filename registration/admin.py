@@ -3,7 +3,16 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User, Family, Child, Adult
 
 
-# admin.site.register(User, UserAdmin)
-admin.site.register(Family)
-admin.site.register(Child)
-admin.site.register(Adult)
+@admin.register(Child)
+class ChildAdmin(admin.ModelAdmin):
+    search_fields = ('lastname', 'firstname',)
+
+
+@admin.register(Family)
+class FamilyAdmin(admin.ModelAdmin):
+    search_fields = ('use_name',)
+
+
+@admin.register(Adult)
+class AdultAdmin(admin.ModelAdmin):
+    search_fields = ('lastname', 'firstname',)

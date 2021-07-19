@@ -2,10 +2,6 @@ from django.contrib import admin
 from .models import Price, Category, Activity, Agenda
 
 
-admin.site.register(Price)
-admin.site.register(Category)
-
-
 class ActivityInLine(admin.TabularInline):
     model = Activity
     extra = 1
@@ -15,3 +11,13 @@ class ActivityInLine(admin.TabularInline):
 class AgendaAdmin(admin.ModelAdmin):
     inlines = [ActivityInLine, ]
     fields = ('entry',)
+
+
+@admin.register(Price)
+class PriceAdmin(admin.ModelAdmin):
+    list_display = ('family_quotient', 'day', 'half_day')
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
