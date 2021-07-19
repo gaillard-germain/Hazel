@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from .models import User, Family, Adult, Child
+from datetime import date
 
 
 class SignUpPageTestCase(TestCase):
@@ -204,7 +205,9 @@ class DeleteThisTestCase(TestCase):
                                              self.password)
         self.client.login(username=self.username, password=self.password)
         self.family = Family.objects.create(user=self.user)
-        self.child = Child.objects.create(family=self.family)
+        self.birth_date = date.fromisoformat('2012-01-01')
+        self.child = Child.objects.create(family=self.family,
+                                          birth_date=self.birth_date)
         self.person = Adult.objects.create()
         self.family.authorized_person.add(self.person)
 

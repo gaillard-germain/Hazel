@@ -14,10 +14,11 @@ class SelectChildPageTestCase(TestCase):
         self.password = 'F4K3u53r'
         self.user = User.objects.create_user(self.username, self.email,
                                              self.password)
+        self.birth_date = date.fromisoformat('2012-01-01')
 
     def test_selectchild_page_returns_200(self):
         family = Family.objects.create(user=self.user)
-        Child.objects.create(family=family)
+        Child.objects.create(family=family, birth_date=self.birth_date)
         self.client.login(username=self.username, password=self.password)
 
         response = self.client.get(reverse('booking:select_child'))
@@ -47,10 +48,11 @@ class CalendarPageTestCase(TestCase):
         self.password = 'F4K3u53r'
         self.user = User.objects.create_user(self.username, self.email,
                                              self.password)
+        self.birth_date = date.fromisoformat('2012-01-01')
 
     def test_calendar_page_returns_200(self):
         family = Family.objects.create(user=self.user)
-        child = Child.objects.create(family=family)
+        child = Child.objects.create(family=family, birth_date=self.birth_date)
         self.client.login(username=self.username, password=self.password)
 
         response = self.client.get(reverse('booking:calendar',
@@ -59,7 +61,7 @@ class CalendarPageTestCase(TestCase):
 
     def test_calendar_page_redirect_if_not_logged(self):
         family = Family.objects.create(user=self.user)
-        child = Child.objects.create(family=family)
+        child = Child.objects.create(family=family, birth_date=self.birth_date)
         response = self.client.get(reverse('booking:calendar',
                                    args=(str(child.id))))
         self.assertEqual(response.status_code, 302)
@@ -80,7 +82,7 @@ class CalendarPageTestCase(TestCase):
     def test_calendar_page_returns_404_if_not_familys_child(self):
         self.client.login(username=self.username, password=self.password)
         family = Family.objects.create(user=self.user)
-        Child.objects.create(family=family)
+        Child.objects.create(family=family, birth_date=self.birth_date)
         response = self.client.get(reverse('booking:calendar',
                                    args=("2")))
         self.assertEqual(response.status_code, 404)
@@ -95,7 +97,9 @@ class MakeCalendarTestCase(TestCase):
         self.user = User.objects.create_user(self.username, self.email,
                                              self.password)
         self.family = Family.objects.create(user=self.user)
-        self.child = Child.objects.create(family=self.family)
+        self.birth_date = date.fromisoformat('2012-01-01')
+        self.child = Child.objects.create(family=self.family,
+                                          birth_date=self.birth_date)
         self.monday = date.today()
 
         while self.monday.weekday() != 0:
@@ -144,7 +148,9 @@ class ModifyViewTestCase(TestCase):
         self.user = User.objects.create_user(self.username, self.email,
                                              self.password)
         self.family = Family.objects.create(user=self.user)
-        self.child = Child.objects.create(family=self.family)
+        self.birth_date = date.fromisoformat('2012-01-01')
+        self.child = Child.objects.create(family=self.family,
+                                          birth_date=self.birth_date)
 
     def test_modifyview_cancels_booking_and_clears_slot(self):
         slot = Slot.objects.create(day=date.today())
