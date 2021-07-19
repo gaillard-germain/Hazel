@@ -71,9 +71,6 @@ class RegFamily(View):
             if self.modify:
                 family.id = old_family.id
 
-            family.use_name = family_form.cleaned_data.get('use_name').upper()
-            family.home_address = family_form.cleaned_data.get(
-                'home_address').upper()
             family.user = user
             family.doctor = Adult.create_doc(doctor_form)
             family.save()
