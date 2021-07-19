@@ -5,9 +5,9 @@ from registration.models import Child
 
 
 class Period(models.Model):
-    name = models.CharField(max_length=50)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    name = models.CharField(max_length=50, verbose_name='Nom')
+    start_date = models.DateField(verbose_name='Date début')
+    end_date = models.DateField(verbose_name='Date fin')
 
     class Meta:
         verbose_name = 'Période'
@@ -88,7 +88,7 @@ class Booking(models.Model):
     child = models.ForeignKey(Child, related_name='booking',
                               on_delete=models.CASCADE, verbose_name='Enfant')
     slot = models.ForeignKey(Slot, related_name='booking',
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE, verbose_name='Créneau')
     whole = models.BooleanField(default=True, verbose_name='Journée complète')
     validated = models.BooleanField(default=False, verbose_name='Validé')
 
