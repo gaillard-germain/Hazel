@@ -3,9 +3,6 @@ config/settings/local.py
 config/settings/staging.py
 config/settings/production.py
 
-#coverage
-cover/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -58,6 +55,8 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+cover/
+.coveragerc
 
 # Translations
 *.mo

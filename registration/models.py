@@ -37,7 +37,7 @@ class Adult(models.Model):
         self.lastname = self.lastname.upper()
         if self.address:
             self.address = self.address.upper()
-        super(Adult, self).save( *args, **kwargs)
+        super(Adult, self).save(*args, **kwargs)
 
     @classmethod
     def create_lg(cls, session_dict):
@@ -118,7 +118,7 @@ class Family(models.Model):
     def save(self, *args, **kwargs):
         self.use_name = self.use_name.upper()
         self.home_address = self.home_address.upper()
-        super(Family, self).save( *args, **kwargs)
+        super(Family, self).save(*args, **kwargs)
 
 
 class Child(models.Model):
@@ -158,7 +158,7 @@ class Child(models.Model):
     def save(self, *args, **kwargs):
         self.firstname = self.firstname.title()
         self.lastname = self.lastname.upper()
-        super(Child, self).save( *args, **kwargs)
+        super(Child, self).save(*args, **kwargs)
 
     @classmethod
     def create_child(cls, family, session_dict):
@@ -176,8 +176,7 @@ class Child(models.Model):
 
         return child
 
-    @classmethod
-    def get_age(cls):
+    def get_age(self):
         return int(
-            (date.today() - cls.birth_date).days/365.2425
+            (date.today() - self.birth_date).days/365.2425
         )

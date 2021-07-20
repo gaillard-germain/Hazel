@@ -139,11 +139,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_REDIRECT_URL = '/'
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=home,registration,booking',
-    '--cover-html',
-]
