@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from home.models import Category
 
 from datetime import date
 
@@ -42,8 +43,8 @@ class Adult(models.Model):
     @classmethod
     def create_lg(cls, session_dict):
         legal_guardian, created = cls.objects.get_or_create(
-            firstname=session_dict['firstname'],
-            lastname=session_dict['lastname'],
+            firstname=session_dict['firstname'].title(),
+            lastname=session_dict['lastname'].upper(),
             cell_phone=session_dict['cell_phone']
         )
 
@@ -60,9 +61,9 @@ class Adult(models.Model):
     def create_doc(cls, form):
         doctor, created = cls.objects.get_or_create(
             firstname="Dr",
-            lastname=form.cleaned_data.get('lastname'),
+            lastname=form.cleaned_data.get('lastname').upper(),
             job_phone=form.cleaned_data.get('job_phone'),
-            address=form.cleaned_data.get('address')
+            address=form.cleaned_data.get('address').upper()
         )
 
         return doctor
@@ -70,8 +71,8 @@ class Adult(models.Model):
     @classmethod
     def create_person(cls, form):
         person, created = cls.objects.get_or_create(
-            firstname=form.cleaned_data.get('firstname'),
-            lastname=form.cleaned_data.get('lastname'),
+            firstname=form.cleaned_data.get('firstname').title(),
+            lastname=form.cleaned_data.get('lastname').upper(),
             cell_phone=form.cleaned_data.get('cell_phone'),
         )
 
@@ -127,6 +128,10 @@ class Child(models.Model):
     firstname = models.CharField(max_length=50, verbose_name='Prénom')
     lastname = models.CharField(max_length=50, verbose_name='Nom')
     birth_date = models.DateField(verbose_name='Date de naissance')
+    category = models.ForeignKey(Category, related_name='children',
+                                 on_delete=models.SET_NULL,
+                                 blank=True, null=True,
+                                 verbose_name='Catégorie')
     grade = models.CharField(max_length=10, blank=True, null=True,
                              verbose_name='Classe')
     school = models.CharField(max_length=50, blank=True, null=True,
@@ -164,14 +169,14 @@ class Child(models.Model):
     def create_child(cls, family, session_dict):
         child, created = cls.objects.get_or_create(
             family=family,
-            firstname=session_dict['firstname'],
-            lastname=session_dict['lastname'],
+            firstname=session_dict['firstname'].title(),
+            lastname=session_dict['lastname'].upper(),
             birth_date=date.fromisoformat(session_dict['birth_date'])
         )
-
         child.grade = session_dict['grade']
         child.school = session_dict['school']
         child.info = session_dict['info']
+        child.set_category()
         child.save()
 
         return child
@@ -180,3 +185,13 @@ class Child(models.Model):
         return int(
             (date.today() - self.birth_date).days/365.2425
         )
+
+    def set_category(self):
+        age = self.get_age()
+        try:
+            category = Category.objects.get(
+                age_min__lte=age, age_max__gte=age
+            )
+            self.category = category
+        except Category.DoesNotExist:
+            pass

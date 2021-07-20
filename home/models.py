@@ -21,6 +21,8 @@ class Price(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nom')
+    age_min = models.IntegerField()
+    age_max = models.IntegerField()
     description = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
