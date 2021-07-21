@@ -11,6 +11,10 @@ class Period(models.Model):
 
     class Meta:
         verbose_name = 'Période'
+        constraints = [
+            models.UniqueConstraint(fields=['name'],
+                                    name='unique_period'),
+        ]
 
     def __str__(self):
         return self.name
@@ -67,6 +71,10 @@ class Slot(models.Model):
         ordering = ['day']
         verbose_name = 'Créneau'
         verbose_name_plural = 'Créneaux'
+        constraints = [
+            models.UniqueConstraint(fields=['day'],
+                                    name='unique_slot'),
+        ]
 
     def __str__(self):
         return _date(self.day, 'd F Y')
@@ -94,6 +102,10 @@ class Booking(models.Model):
 
     class Meta:
         verbose_name = 'Réservation'
+        constraints = [
+            models.UniqueConstraint(fields=['child', 'slot'],
+                                    name='unique_booking'),
+        ]
 
     def __str__(self):
         return '{} {}'.format(self.child, self.slot)

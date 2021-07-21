@@ -156,6 +156,10 @@ class Child(models.Model):
 
     class Meta:
         verbose_name = 'Enfant'
+        constraints = [
+            models.UniqueConstraint(fields=['family', 'firstname', 'lastname'],
+                                    name='unique_child'),
+        ]
 
     def __str__(self):
         return '{} {}'.format(self.firstname, self.lastname)

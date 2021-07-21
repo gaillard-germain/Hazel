@@ -14,6 +14,10 @@ class Price(models.Model):
     class Meta:
         ordering = ['day']
         verbose_name = 'Tarif'
+        constraints = [
+            models.UniqueConstraint(fields=['family_quotient'],
+                                    name='unique_quotient'),
+        ]
 
     def __str__(self):
         return 'Quotient familial {}'.format(self.family_quotient)
@@ -27,6 +31,10 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = 'Catégorie'
+        constraints = [
+            models.UniqueConstraint(fields=['name'],
+                                    name='unique_category'),
+        ]
 
     def __str__(self):
         return self.name

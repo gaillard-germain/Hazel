@@ -54,15 +54,3 @@ class BookingAdmin(admin.ModelAdmin):
     def categorie(self, obj):
         child = Child.objects.get(booking=obj)
         return child.category
-
-    def save_model(self, request, obj, form, change):
-        try:
-            obj = Booking.objects.get(
-                child=form.cleaned_data.get('child'),
-                slot=form.cleaned_data.get('slot')
-            )
-            self.message_user(request, 'Cette réservation existe déjà',
-                              level=messages.WARNING)
-
-        except Booking.DoesNotExist:
-            super().save_model(request, obj, form, change)
