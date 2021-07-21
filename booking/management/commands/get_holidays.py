@@ -8,6 +8,7 @@ from booking.models import Period
 class Command(BaseCommand):
     """ Custom command to get the holidays of the current school year from
         https://data.education.gouv.fr/api and save it to the database.
+        -- new school year is set after september --
         ./manage.py get_holidays to run (! it will delete former periods!) """
 
     def get_school_year(self):

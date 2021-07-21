@@ -11,6 +11,8 @@ class User(AbstractUser):
 
 
 class Adult(models.Model):
+    """ All Adults : father, mother, doctor, ... """
+
     firstname = models.CharField(max_length=50, verbose_name='Prénom')
     lastname = models.CharField(max_length=50, verbose_name='Nom')
     email = models.EmailField(max_length=50, null=True, verbose_name='E-mail')
@@ -42,6 +44,8 @@ class Adult(models.Model):
 
     @classmethod
     def create_lg(cls, session_dict):
+        """ Create Adult legal guardian if not exists """
+
         legal_guardian, created = cls.objects.get_or_create(
             firstname=session_dict['firstname'].title(),
             lastname=session_dict['lastname'].upper(),
@@ -59,6 +63,8 @@ class Adult(models.Model):
 
     @classmethod
     def create_doc(cls, form):
+        """ Create Adult doctor if not exists """
+
         doctor, created = cls.objects.get_or_create(
             firstname="Dr",
             lastname=form.cleaned_data.get('lastname').upper(),
@@ -70,6 +76,8 @@ class Adult(models.Model):
 
     @classmethod
     def create_person(cls, form):
+        """ Create Adult authorized to pick-up kid if not exists """
+
         person, created = cls.objects.get_or_create(
             firstname=form.cleaned_data.get('firstname').title(),
             lastname=form.cleaned_data.get('lastname').upper(),
@@ -83,6 +91,8 @@ class Adult(models.Model):
 
 
 class Family(models.Model):
+    """ The family with all infos """
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE, blank=True, null=True,
@@ -123,6 +133,8 @@ class Family(models.Model):
 
 
 class Child(models.Model):
+    """ The child with infos and relations """
+
     family = models.ForeignKey(Family, on_delete=models.CASCADE,
                                verbose_name='Famille')
     firstname = models.CharField(max_length=50, verbose_name='Prénom')
@@ -171,6 +183,8 @@ class Child(models.Model):
 
     @classmethod
     def create_child(cls, family, session_dict):
+        """ Create a child if not exists """
+
         child, created = cls.objects.get_or_create(
             family=family,
             firstname=session_dict['firstname'].title(),
@@ -186,11 +200,15 @@ class Child(models.Model):
         return child
 
     def get_age(self):
+        """ Returns child's age """
+
         return int(
             (date.today() - self.birth_date).days/365.2425
         )
 
     def set_category(self):
+        """ Set automatically the child's category in terms of his age """
+
         age = self.get_age()
         try:
             category = Category.objects.get(

@@ -12,6 +12,7 @@ from datetime import date
 
 
 class SignUp(View):
+    """ A view to register a new user """
 
     form_class = SignUpForm
     template_name = 'registration/signup.html'
@@ -41,6 +42,7 @@ class SignUp(View):
 
 
 class RegFamily(View):
+    """ A view to register a new family or to modify the informations """
 
     modify = False
     family_form_class = FamilyForm
@@ -90,6 +92,7 @@ class RegFamily(View):
 
 
 class ManageAccount(View):
+    """ A view to display user's account informations """
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -113,6 +116,7 @@ class ManageAccount(View):
 
 
 class RegChild(View):
+    """ A view to register a new child (step-by-step) """
 
     form_class = ChildForm
     template_name = 'registration/regchild.html'
@@ -149,6 +153,7 @@ class RegChild(View):
 
 
 class RegChildFinal(RegChild):
+    """ Final view to complet child registration """
 
     form_class = ParentalAuthorizationForm
     title = 'Autorisations parentales'
@@ -181,6 +186,8 @@ class RegChildFinal(RegChild):
 
 
 class RegPerson(View):
+    """ A view to register new person with the ability
+        to pick-up the children """
 
     form_class = AuthorizedPersonForm
     template_name = 'registration/regperson.html'
@@ -205,6 +212,7 @@ class RegPerson(View):
 
 
 class DeleteThis(View):
+    """ A view allowing the deletion of a child or an authorized person """
 
     def post(self, request, *args, **kwargs):
 

@@ -8,6 +8,7 @@ from .models import Period, Booking, Slot
 
 
 class SelectChild(View):
+    """ A view to select child for booking """
 
     template_name = 'booking/select_child.html'
 
@@ -34,6 +35,7 @@ class SelectChild(View):
 
 
 class Modify(View):
+    """ A view triggered with Ajax to manage booking actions """
 
     def post(self, request, *args, **kwargs):
 
@@ -60,6 +62,7 @@ class Modify(View):
 
 
 class Calendar(View):
+    """ A view to display bookings in a calendar """
 
     template_name = 'booking/calendar.html'
 

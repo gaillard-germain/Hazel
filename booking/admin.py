@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from .models import Period, Booking, Slot
 from registration.models import Child
 from home.models import Category
@@ -13,7 +13,7 @@ class BookingInLine(admin.TabularInline):
 class SlotAdmin(admin.ModelAdmin):
     search_fields = ('day',)
     readonly_fields = ('day', 'is_full',)
-    inlines = [BookingInLine,]
+    inlines = [BookingInLine, ]
     list_filter = ('day',)
 
 
@@ -23,6 +23,8 @@ class PeriodAdmin(admin.ModelAdmin):
 
 
 class CategoryListFilter(admin.SimpleListFilter):
+    """ Custom filter to choose children's category """
+
     title = ('Groupe')
     parameter_name = 'groupe'
 
@@ -48,9 +50,11 @@ class CategoryListFilter(admin.SimpleListFilter):
 class BookingAdmin(admin.ModelAdmin):
     list_display = ('child', 'categorie', 'slot', 'whole', 'validated')
     list_editable = ('whole', 'validated')
-    list_filter = ('slot',CategoryListFilter)
+    list_filter = ('slot', CategoryListFilter)
     ordering = ('slot',)
 
     def categorie(self, obj):
+        """ Custom admin field to display children's categories """
+
         child = Child.objects.get(booking=obj)
         return child.category

@@ -4,6 +4,8 @@ from datetime import date
 
 
 class Price(models.Model):
+    """ Prices for day or half-day in terms of family quotient """
+
     family_quotient = models.CharField(max_length=15,
                                        verbose_name='Quotient familial')
     day = models.DecimalField(max_digits=4, decimal_places=2,
@@ -24,6 +26,8 @@ class Price(models.Model):
 
 
 class Category(models.Model):
+    """ Child's categories and age range """
+
     name = models.CharField(max_length=50, verbose_name='Nom')
     age_min = models.IntegerField()
     age_max = models.IntegerField()
@@ -41,6 +45,8 @@ class Category(models.Model):
 
 
 class Agenda(models.Model):
+    """ Planned entertainments day """
+
     entry = models.DateField(verbose_name='Date')
 
     class Meta:
@@ -69,6 +75,8 @@ class Agenda(models.Model):
 
 
 class Activity(models.Model):
+    """ Planned activities to entertain children """
+
     name = models.CharField(max_length=100, verbose_name='Nom')
     categories = models.ManyToManyField(Category, related_name='activities',
                                         verbose_name='Catégorie')

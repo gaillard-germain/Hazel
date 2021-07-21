@@ -5,6 +5,8 @@ from registration.models import Child
 
 
 class Period(models.Model):
+    """ Holidays periods """
+
     name = models.CharField(max_length=50, verbose_name='Nom')
     start_date = models.DateField(verbose_name='Date début')
     end_date = models.DateField(verbose_name='Date fin')
@@ -64,6 +66,8 @@ class Period(models.Model):
 
 
 class Slot(models.Model):
+    """ Slot for booking (the only interest is to store is_full field)"""
+
     day = models.DateField(verbose_name='Date')
     is_full = models.BooleanField(default=False, verbose_name='Complet')
 
@@ -80,6 +84,7 @@ class Slot(models.Model):
         return _date(self.day, 'd F Y')
 
     def update_slot(self):
+        """ Updates slot state when user booked a day """
         booking_count = Booking.objects.filter(slot=self).count()
 
         if booking_count == 0:
@@ -93,6 +98,8 @@ class Slot(models.Model):
 
 
 class Booking(models.Model):
+    """ Booking book """
+
     child = models.ForeignKey(Child, related_name='booking',
                               on_delete=models.CASCADE, verbose_name='Enfant')
     slot = models.ForeignKey(Slot, related_name='booking',
@@ -111,6 +118,8 @@ class Booking(models.Model):
         return '{} {}'.format(self.child, self.slot)
 
     def update_booking(self, command):
+        """ updates booking when user cancelled or booked a day """
+
         if command == 'cancel':
             self.delete()
 

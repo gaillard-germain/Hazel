@@ -4,6 +4,7 @@ from .models import Price, Agenda
 
 
 class Index(View):
+    """ A view to display general information """
 
     template_name = 'home/index.html'
 
