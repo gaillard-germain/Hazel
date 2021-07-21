@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from .models import Period, Booking, Slot
 from registration.models import Child
 from home.models import Category
@@ -22,7 +22,7 @@ class PeriodAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'end_date')
 
 
-class GroupListFilter(admin.SimpleListFilter):
+class CategoryListFilter(admin.SimpleListFilter):
     title = ('Groupe')
     parameter_name = 'groupe'
 
@@ -43,13 +43,26 @@ class GroupListFilter(admin.SimpleListFilter):
 
             return queryset
 
+
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('child', 'groupe', 'slot', 'whole', 'validated')
+    list_display = ('child', 'categorie', 'slot', 'whole', 'validated')
     list_editable = ('whole', 'validated')
-    list_filter = ('slot',GroupListFilter)
+    list_filter = ('slot',CategoryListFilter)
     ordering = ('slot',)
 
-    def groupe(self, obj):
+    def categorie(self, obj):
         child = Child.objects.get(booking=obj)
         return child.category
+
+    def save_model(self, request, obj, form, change):
+        try:
+            obj = Booking.objects.get(
+                child=form.cleaned_data.get('child'),
+                slot=form.cleaned_data.get('slot')
+            )
+            self.message_user(request, 'Cette réservation existe déjà',
+                              level=messages.WARNING)
+
+        except Booking.DoesNotExist:
+            super().save_model(request, obj, form, change)
