@@ -9,7 +9,8 @@ class IndexPageTestCase(TestCase):
 
     def setUp(self):
         self.agenda = Agenda.objects.create(entry=date.today())
-        self.category = Category.objects.create(name='FAKE')
+        self.category = Category.objects.create(name='FAKE', age_min=5,
+                                                age_max=8)
         self.activity = Activity.objects.create(
             name='Fake activity',
             day=self.agenda,
