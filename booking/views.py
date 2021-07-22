@@ -35,7 +35,7 @@ class SelectChild(View):
 
 
 class Modify(View):
-    """ A view triggered with Ajax to manage booking actions """
+    """ A view triggered by Ajax to manage booking actions """
 
     def post(self, request, *args, **kwargs):
 

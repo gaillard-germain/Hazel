@@ -1,7 +1,33 @@
 from django.contrib import admin
+from django.http import HttpResponse
+import csv
 from .models import Period, Booking, Slot
 from registration.models import Child
 from home.models import Category
+
+
+class ExportCsvMixin:
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = (
+            'attachment; filename={}.csv'.format(meta)
+        )
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow(
+                [getattr(obj, field) for field in field_names]
+            )
+
+        return response
+
+    description = "Exporter les Réservations sélectionnées au format CSV"
+    export_as_csv.short_description = description
 
 
 class BookingInLine(admin.TabularInline):
@@ -47,11 +73,12 @@ class CategoryListFilter(admin.SimpleListFilter):
 
 
 @admin.register(Booking)
-class BookingAdmin(admin.ModelAdmin):
+class BookingAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('child', 'categorie', 'slot', 'whole', 'validated')
     list_editable = ('whole', 'validated')
-    list_filter = ('slot', CategoryListFilter)
+    list_filter = ('validated', CategoryListFilter, 'slot',)
     ordering = ('slot',)
+    actions = ["export_as_csv"]
 
     def categorie(self, obj):
         """ Custom admin field to display children's categories """
