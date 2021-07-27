@@ -18,6 +18,7 @@ class Index(View):
         }
         return render(request, self.template_name, context)
 
+
 class LegalNotice(View):
     """ A view to display legal notice """
 

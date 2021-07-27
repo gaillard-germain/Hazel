@@ -30,3 +30,10 @@ class IndexPageTestCase(TestCase):
         self.assertEqual(
             response.context['agenda'][self.category][day][0].name, result
         )
+
+
+class LegalNoticePageTestCase(TestCase):
+
+    def test_legal_notice_page_return_200(self):
+        response = self.client.get(reverse('home:legal_notice'))
+        self.assertEqual(response.status_code, 200)
