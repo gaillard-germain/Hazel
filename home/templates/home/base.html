@@ -50,9 +50,12 @@
     </header>
     {% block content %}{% endblock %}
     <footer>
-      <a href="#">Mentions légales</a>
+      <a href="{% url 'home:legal_notice' %}">Mentions légales</a>
       <a href="/#contact">Contact</a>
-      <p>Copyright <i class="far fa-copyright"></i> Germain GAILLARD</p>
+      <p>L'application et le site ont étaient créés par Germain GAILLARD</p>
+      <a href="mailto:gaillard.germain@gmail.com"><i class="far fa-envelope"></i></a>
+      <a href="https://github.com/screw-pack" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+      <a href="https://www.linkedin.com/in/gaillard-germain-2301861b4/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
     </footer>
   </body>
   <script src="{% static 'home/js/scripts.js' %}"></script>

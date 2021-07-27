@@ -10,7 +10,7 @@ class ExportCsvMixin:
     def export_as_csv(self, request, queryset):
 
         meta = self.model._meta
-        field_names = [field.name for field in meta.fields]
+        fields = [field for field in meta.fields]
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = (
@@ -18,11 +18,16 @@ class ExportCsvMixin:
         )
         writer = csv.writer(response)
 
-        writer.writerow(field_names)
+        writer.writerow([field.verbose_name for field in fields])
         for obj in queryset:
-            row = writer.writerow(
-                [getattr(obj, field) for field in field_names]
-            )
+            data_row = []
+            for field in fields:
+                value = getattr(obj, field.name)
+                data_row.append(value)
+            writer.writerow(data_row)
+            # row = writer.writerow(
+            #     [getattr(obj, field) for field in field_names]
+            # )
 
         return response
 

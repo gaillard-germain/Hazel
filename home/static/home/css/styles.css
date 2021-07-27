@@ -618,6 +618,17 @@ section a:hover {
   border: 2px dashed white !important;
 }
 
+.notice {
+  text-align: left;
+  padding: 2em;
+}
+
+.notice h1 {
+  text-align: center;
+  margin-top: 3em;
+  font-size: 2em;
+}
+
 footer {
   text-align: center;
   background-color: lightgrey;

@@ -17,3 +17,11 @@ class Index(View):
             'agenda': agenda
         }
         return render(request, self.template_name, context)
+
+class LegalNotice(View):
+    """ A view to display legal notice """
+
+    template_name = 'home/legalnotice.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
