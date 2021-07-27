@@ -1,12 +1,12 @@
 @charset "UTF-8";
 
 :root {
-  --lightblue: #c5dcea;
+  --lightblue: #dcecf6;
   --blue: #79a7c5;
   --darkblue: #285a7b;
   --red: #b6491b;
   --green: #c6e293;
-  --orange: #e09b31;
+  --orange: #f3d389;
   --darkorange: #c5821c;
   --yellow: #f3e9ad;
   --lightgrey: #ececec;
@@ -330,7 +330,7 @@ header {
 }
 
 .rounded-borders {
-  border: 1px solid var(--lightgrey);
+  border: 1px solid lightgrey;
   border-radius: 10px;
 }
 
@@ -411,13 +411,13 @@ section a:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-image: linear-gradient(var(--lightblue), var(--darkblue));
+  background-image: linear-gradient(var(--lightblue), var(--blue));
   flex-grow: 1;
   flex-shrink: 0;
 }
 
 #agenda .card .card-center {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 0.5em;
   font-weight: bold;
 }
