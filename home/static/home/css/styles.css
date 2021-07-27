@@ -12,7 +12,7 @@
   --lightgrey: #ececec;
   --darkgrey: #414141;
   --warning: #e26908;
-  --glass: rgba(197, 220, 234, 0.8);
+  --glass: rgba(197, 220, 234, 0.9);
 }
 
 *,
@@ -149,6 +149,7 @@ header {
 
 .main-title {
   margin-top: 3em;
+  font-size: 2.2em;
 }
 
 .section-title {
@@ -553,15 +554,17 @@ section a:hover {
   display: none;
   padding: 0.5em;
   margin: 0.5em;
-  background-image: linear-gradient(var(--orange), var(--darkorange));;
-  border-radius: 10px;
+  background-image: linear-gradient(
+    #faeed6, #f6c665
+  );
+  border-radius: 5px;
 }
 
 .calendar .months .month h3 {
   margin: 0;
   background-color: rgba(255, 255, 255, 0.5);
   padding: 0.5em;
-  border-radius: 10px 10px 0 0;
+  border-radius: 5px 5px 0 0;
 }
 
 .calendar .months .month .weekdays {
@@ -577,7 +580,7 @@ section a:hover {
 .calendar .months .month .weekdays .weekday h4 {
   margin: 0;
   padding: 0.5em;
-  border-bottom: 1px solid white;
+  border-bottom: 2px solid white;
 }
 
 .calendar .months .month .weekdays .weekday .day-box {
@@ -611,11 +614,11 @@ section a:hover {
 
 
 .full-day {
-  border: 2px solid white !important;
+  border: 2px solid var(--warning) !important;
 }
 
 .half-day {
-  border: 2px dashed white !important;
+  border: 2px dashed var(--warning) !important;
 }
 
 .notice {
@@ -641,6 +644,10 @@ footer a {
   text-decoration: none;
   color: grey;
   padding: 1em;
+}
+
+footer a:hover {
+  color: var(--blue);
 }
 
 /* Responsive */
