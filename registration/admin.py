@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Family, Child, Adult
+from django.contrib.auth.admin import UserAdmin
+from .models import User, Family, Child, Adult
+
+
+admin.site.register(User, UserAdmin)
 
 
 @admin.register(Child)
