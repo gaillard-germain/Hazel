@@ -1,11 +1,12 @@
 # Hazel
 Hazel is the result of my final project as part of my OpenClassRooms training as a Python developer.
 ## About
-It is a django web application that I created for the leisure center in my town. It allows families to register their children directly online and allows the director of the center to access information relating to the children. it also provides information relating to the leisure center.
+It is a django web application that I created for the recreation center in my town. It allows families to register their children directly on-line and the director (as an admin user) can display the bookings and access to the children's infos. Also, he can update some informations about the facility.
 ## Sources
-The informations relating to the holidays periods are from [data.education.gouv.fr](https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/api/?disjunctive.description&disjunctive.location&disjunctive.zones&disjunctive.annee_scolaire&disjunctive.population) API.
+The data relating to the holidays periods are from [data.education.gouv.fr](https://data.education.gouv.fr/explore/dataset/fr-en-calendrier-scolaire/api/?disjunctive.description&disjunctive.location&disjunctive.zones&disjunctive.annee_scolaire&disjunctive.population) API.
 ## Languages, libraries and frameworks
 This web app was developed with **python 3** and the **Django** framework version 3.  
+It use a [PostgreSQL](https://www.postgresql.org/) database.  
 Dynamic part of the site use [JQuery](https://jquery.com/).  
 Icones are from [Font Awesome](https://fontawesome.com/).  
 All required python's libraries are in the requirements.txt file.
