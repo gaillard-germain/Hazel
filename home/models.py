@@ -84,6 +84,9 @@ class Activity(models.Model):
                             on_delete=models.CASCADE, verbose_name='Date')
     start_time = models.TimeField(verbose_name='Heure début')
     end_time = models.TimeField(verbose_name='Heure fin')
+    extra_charge = models.DecimalField(max_digits=4, decimal_places=2,
+                                       verbose_name='Supplément tarif',
+                                       blank=True, null=True)
 
     class Meta:
         ordering = ['start_time']

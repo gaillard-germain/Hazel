@@ -28,8 +28,8 @@ class FamilyForm(forms.ModelForm):
     class Meta:
         model = Family
         fields = ('use_name', 'home_phone', 'home_address', 'plan',
-                  'beneficiary_name', 'beneficiary_number', 'insurance_name',
-                  'insurance_number')
+                  'beneficiary_name', 'beneficiary_number', 'quotient',
+                  'insurance_name', 'insurance_number')
         labels = {
             'use_name': ("Nom d'usage"),
             'home_phone': ('Téléphone (domicile)'),
@@ -37,12 +37,14 @@ class FamilyForm(forms.ModelForm):
             'plan': ("Régime d'appartenance"),
             'beneficiary_name': ("Nom Allocataire"),
             'beneficiary_number': ("Numéro Allocataire"),
+            'quotient': ('Quotient Familial'),
             'insurance_name': ('Assurance'),
             'insurance_number': ('Numéro de police')
         }
         help_texts = {
             'plan': ("Attestation de Quotient Familial à fournir et/ou Bon \
-                      Aide Aux Vacances.")
+                      Aide Aux Vacances."),
+            'quotient': ("Si connu.")
         }
 
 

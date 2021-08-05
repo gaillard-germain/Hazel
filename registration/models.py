@@ -116,6 +116,8 @@ class Family(models.Model):
                                         verbose_name='Nom allocataire')
     beneficiary_number = models.CharField(max_length=50, blank=True, null=True,
                                           verbose_name='N° allocataire')
+    quotient = models.IntegerField(blank=True, null=True,
+                                   verbose_name='Quotient Familial')
     insurance_name = models.CharField(max_length=50, verbose_name='Assurance')
     insurance_number = models.CharField(max_length=50,
                                         verbose_name='N° police')

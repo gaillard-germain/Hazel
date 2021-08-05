@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
 import csv
+import calendar
 from .models import Period, Booking, Slot
 from registration.models import Child
 from home.models import Category
@@ -65,43 +66,40 @@ class BookingAdmin(admin.ModelAdmin):
     def export_as_csv(self, request, queryset):
         """ Adds the action to export a queryset as a csv file """
 
+        month = calendar.month_name[int(request.GET['slot__day__month'])]
+        year = request.GET['slot__day__year']
+
         meta = self.model._meta
         fields = [field for field in meta.fields]
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = (
-            'attachment; filename={}.csv'.format(meta)
+            'attachment; filename=fact_{}_{}.csv'.format(month, year)
         )
         writer = csv.writer(response)
 
-        writer.writerow(['nom', 'prénom', 'date', 'journée', 'demi-journée'])
+        writer.writerow([month, year])
+        writer.writerow([])
+        writer.writerow(['Redevable', 'Consommateur', 'QF', 'Journée',
+                         'Demi-journée'])
 
         queryset = queryset.exclude(validated=False)
 
+        mydict = {}
         for obj in queryset:
-            data_row = []
-            for field in fields:
-                if field.name == 'child':
-                    value = getattr(obj, field.name).lastname
-                    data_row.append(value)
-                    value = getattr(obj, field.name).firstname
-                    data_row.append(value)
+            if obj.child not in mydict:
+                child = Child.objects.get(id=obj.child.id)
+                querychild = queryset.filter(child=child)
+                mydict[obj.child] = [
+                    child.legal_guardian_1.__str__(),
+                    child.__str__(),
+                    child.family.quotient,
+                    querychild.filter(whole=True).count(),
+                    querychild.filter(whole=False).count()
+                ]
 
-                elif field.name == 'slot':
-                    value = getattr(obj, field.name).day
-                    data_row.append(value)
-
-                elif field.name == 'whole':
-                    value = getattr(obj, field.name)
-                    if value:
-                        data_row.append('X')
-                        data_row.append('')
-                        
-                    else:
-                        data_row.append('')
-                        data_row.append('X')
-
-            writer.writerow(data_row)
+        for key, value in mydict.items():
+            writer.writerow(value)
 
         return response
 
