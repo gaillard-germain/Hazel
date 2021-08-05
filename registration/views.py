@@ -212,7 +212,8 @@ class RegPerson(View):
 
 
 class DeleteThis(View):
-    """ A view allowing the deletion of a child or an authorized person """
+    """ A view allowing the removing of a child or an authorized person
+        from family"""
 
     def post(self, request, *args, **kwargs):
 
@@ -224,12 +225,8 @@ class DeleteThis(View):
         if this_kind == 'child':
             try:
                 child = Child.objects.get(id=this_id)
-                bookings = Booking.objects.filter(child=child.id)
-                for booking in bookings:
-                    slot = Slot.objects.get(booking=booking.id)
-                    booking.delete()
-                    slot.update_slot()
-                child.delete()
+                child.family = None
+                child.save()
                 response['status'] = 'OK'
 
             except Child.DoesNotExist:

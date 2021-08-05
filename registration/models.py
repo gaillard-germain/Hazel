@@ -136,7 +136,7 @@ class Child(models.Model):
     """ The child with infos and relations """
 
     family = models.ForeignKey(Family, on_delete=models.CASCADE,
-                               verbose_name='Famille')
+                               verbose_name='Famille', null=True)
     firstname = models.CharField(max_length=50, verbose_name='Prénom')
     lastname = models.CharField(max_length=50, verbose_name='Nom')
     birth_date = models.DateField(verbose_name='Date de naissance')

@@ -211,11 +211,11 @@ class DeleteThisTestCase(TestCase):
         self.person = Adult.objects.create()
         self.family.authorized_person.add(self.person)
 
-    def test_deletethis_delete_child(self):
-        old_children = Child.objects.all().count()
+    def test_deletethis_remove_child(self):
+        old_children = Child.objects.filter(family=self.family).count()
         self.client.post(reverse('registration:delete_this'),
                          {'this_kind': 'child', 'this_id': self.child.id})
-        new_children = Child.objects.all().count()
+        new_children = Child.objects.filter(family=self.family).count()
         self.assertEqual(new_children, old_children - 1)
 
     def test_deletethis_remove_authorized_person(self):
@@ -229,13 +229,13 @@ class DeleteThisTestCase(TestCase):
     def test_deletethis_raise_404_if_nochild(self):
         response = self.client.post(
             reverse('registration:delete_this'),
-            {'this_kind': 'child', 'this_id': '10'}
+            {'this_kind': 'child', 'this_id': '0'}
         )
         self.assertEqual(response.status_code, 404)
 
     def test_deletethis_raise_404_if_noperson(self):
         response = self.client.post(
             reverse('registration:delete_this'),
-            {'this_kind': 'adult', 'this_id': '10'}
+            {'this_kind': 'adult', 'this_id': '0'}
         )
         self.assertEqual(response.status_code, 404)
