@@ -90,10 +90,14 @@ class BookingAdmin(admin.ModelAdmin):
             if obj.child not in mydict:
                 child = Child.objects.get(id=obj.child.id)
                 querychild = queryset.filter(child=child)
+                if child.family:
+                    quotient = child.family.quotient
+                else:
+                    quotient = None
                 mydict[obj.child] = [
                     child.legal_guardian_1.__str__(),
                     child.__str__(),
-                    child.family.quotient,
+                    quotient,
                     querychild.filter(whole=True).count(),
                     querychild.filter(whole=False).count()
                 ]
