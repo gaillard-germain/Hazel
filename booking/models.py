@@ -1,7 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import date as _date
 from datetime import date, timedelta
-from registration.models import Child
+
+from registration.models import Child, Category
 
 
 class Period(models.Model):
@@ -12,7 +13,8 @@ class Period(models.Model):
     end_date = models.DateField(verbose_name='Date fin')
 
     class Meta:
-        verbose_name = 'Période'
+        verbose_name = "Période d'ouverture"
+        verbose_name_plural = "Périodes d'ouverture"
         constraints = [
             models.UniqueConstraint(fields=['name'],
                                     name='unique_period'),
@@ -73,8 +75,7 @@ class Slot(models.Model):
 
     class Meta:
         ordering = ['day']
-        verbose_name = 'Créneau'
-        verbose_name_plural = 'Créneaux'
+        verbose_name = 'Jour'
         constraints = [
             models.UniqueConstraint(fields=['day'],
                                     name='unique_slot'),
@@ -86,8 +87,9 @@ class Slot(models.Model):
     def update_slot(self):
         """ Updates slot state when user booked a day """
         booking_count = Booking.objects.filter(slot=self).count()
+        activity_count = Activity.objects.filter(slot=self).count()
 
-        if booking_count == 0:
+        if booking_count == 0 and activity_count == 0:
             self.delete()
         elif booking_count >= 60 and not self.is_full:
             self.is_full = True
@@ -130,3 +132,43 @@ class Booking(models.Model):
         elif command == 'half-day' and self.whole:
             self.whole = False
             self.save()
+
+
+class Activity(models.Model):
+    """ Planned activities to entertain children """
+
+    name = models.CharField(max_length=100, verbose_name='Nom')
+    categories = models.ManyToManyField(Category, related_name='activities',
+                                        verbose_name='Catégorie')
+    slot = models.ForeignKey(Slot, related_name='activities',
+                             on_delete=models.CASCADE, verbose_name='Date',
+                             null=True)
+    start_time = models.TimeField(verbose_name='Heure début')
+    end_time = models.TimeField(verbose_name='Heure fin')
+    extra_charge = models.DecimalField(max_digits=4, decimal_places=2,
+                                       verbose_name='Supplément tarif',
+                                       blank=True, null=True)
+
+    class Meta:
+        ordering = ['start_time']
+        verbose_name = 'Activité'
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def make_agenda(cls):
+        all_categories = Category.objects.all()
+        slots = Slot.objects.filter(day__gte=date.today())
+        agenda = {}
+
+        for category in all_categories:
+            agenda[category] = {}
+            for slot in slots:
+                new_day = _date(slot.day, 'D d F')
+                activities = cls.objects.filter(slot=slot.id)
+                activities = activities.filter(categories=category)
+                if activities:
+                    agenda[category][new_day] = activities
+
+        return agenda

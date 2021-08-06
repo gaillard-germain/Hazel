@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.views import View
-from .models import Price, Agenda
+from .models import Price
+
+from booking.models import Activity
 
 
 class Index(View):
@@ -10,7 +12,7 @@ class Index(View):
 
     def get(self, request, *args, **kwargs):
         prices = Price.objects.all()
-        agenda = Agenda.make_agenda()
+        agenda = Activity.make_agenda()
 
         context = {
             'prices': prices,

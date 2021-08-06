@@ -2,18 +2,19 @@ from django.test import TestCase
 from django.urls import reverse
 from django.template.defaultfilters import date as _date
 from datetime import date, datetime
-from .models import Agenda, Category, Activity
+from registration.models import Category
+from booking.models import Slot, Activity
 
 
 class IndexPageTestCase(TestCase):
 
     def setUp(self):
-        self.agenda = Agenda.objects.create(entry=date.today())
+        self.slot = Slot.objects.create(day=date.today())
         self.category = Category.objects.create(name='FAKE', age_min=5,
                                                 age_max=8)
         self.activity = Activity.objects.create(
             name='Fake activity',
-            day=self.agenda,
+            slot=self.slot,
             start_time=datetime.now().time(),
             end_time=datetime.now().time()
         )
@@ -25,7 +26,7 @@ class IndexPageTestCase(TestCase):
 
     def test_index_page_agenda_conform_to_expected(self):
         response = self.client.get(reverse('home:index'))
-        day = _date(self.agenda.entry, 'D d F')
+        day = _date(self.slot.day, 'D d F')
         result = self.activity.name
         self.assertEqual(
             response.context['agenda'][self.category][day][0].name, result

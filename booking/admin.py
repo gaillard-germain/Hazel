@@ -2,9 +2,21 @@ from django.contrib import admin
 from django.http import HttpResponse
 import csv
 import calendar
-from .models import Period, Booking, Slot
-from registration.models import Child
-from home.models import Category
+from .models import Period, Booking, Slot, Activity
+from registration.models import Child, Category
+
+
+class ActivityInLine(admin.TabularInline):
+    model = Activity
+    extra = 1
+
+
+@admin.register(Activity)
+class ActivityAdmin(admin.ModelAdmin):
+    search_fields = ('name',)
+    list_display = ('name', 'slot')
+    ordering = ('-slot',)
+    date_hierarchy = 'slot__day'
 
 
 class BookingInLine(admin.TabularInline):
@@ -14,8 +26,8 @@ class BookingInLine(admin.TabularInline):
 
 @admin.register(Slot)
 class SlotAdmin(admin.ModelAdmin):
-    search_fields = ('day',)
-    readonly_fields = ('day', 'is_full',)
+    date_hierarchy = 'day'
+    readonly_fields = ('is_full',)
     inlines = [BookingInLine, ]
     list_filter = ('day',)
 

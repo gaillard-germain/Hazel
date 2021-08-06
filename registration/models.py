@@ -1,13 +1,31 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from home.models import Category
 
 from datetime import date
 
 
 class User(AbstractUser):
     pass
+
+
+class Category(models.Model):
+    """ Child's categories and age range """
+
+    name = models.CharField(max_length=50, verbose_name='Nom')
+    age_min = models.IntegerField()
+    age_max = models.IntegerField()
+    description = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Catégorie'
+        constraints = [
+            models.UniqueConstraint(fields=['name'],
+                                    name='category_unique'),
+        ]
+
+    def __str__(self):
+        return self.name
 
 
 class Adult(models.Model):

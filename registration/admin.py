@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Family, Child, Adult
+from .models import User, Family, Child, Adult, Category
 
 
 admin.site.register(User, UserAdmin)
@@ -20,3 +20,8 @@ class FamilyAdmin(admin.ModelAdmin):
 @admin.register(Adult)
 class AdultAdmin(admin.ModelAdmin):
     search_fields = ('lastname', 'firstname',)
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
