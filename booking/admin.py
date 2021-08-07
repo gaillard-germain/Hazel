@@ -75,6 +75,28 @@ class BookingAdmin(admin.ModelAdmin):
 
         return obj.child.category
 
+    def save_model(self, request, obj, form, change):
+        """ overrided to perform a slot update when added """
+        super().save_model(request, obj, form, change)
+        slot = Slot.objects.get(booking=obj)
+        slot.update_slot()
+
+    def delete_model(self, request, obj):
+        """ overrided to perform a slot update when removed one """
+        slot = Slot.objects.get(booking=obj)
+        super().delete_model(request, obj)
+        slot.update_slot()
+
+    def delete_queryset(self, request, queryset):
+        """ overrided to perform a slot update when removed several """
+        slots = []
+        for booking in queryset:
+            slot = Slot.objects.get(booking=booking)
+            slots.append(slot)
+        super().delete_queryset(request, queryset)
+        for slot in set(slots):
+            slot.update_slot()
+
     def export_as_csv(self, request, queryset):
         """ Adds the action to export a queryset as a csv file """
 
