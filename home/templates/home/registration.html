@@ -23,18 +23,24 @@
   </p>
   <h3>Documents imprimables</h3>
   <ul class="not-dotted">
+    {% load static %}
     <li>
-      <a href="https://www.ccbastides47.com/wp-content/uploads/2020/12/Fiche-dinscription-ALP-ALSH-2020-2021-Alexis.pdf" target="_blank" rel="noopener noreferrer">
+      <a href="{% static 'home/files/rules.pdf' %}" target="_blank" rel="noopener noreferrer">
+        Réglement intérieur
+      </a>
+    </li>
+    <li>
+      <a href="{% static 'home/files/registration_form.pdf' %}" target="_blank" rel="noopener noreferrer">
         Fiche d’inscription ALSH/ALP
       </a>
     </li>
     <li>
-      <a href="https://www.ccbastides47.com/wp-content/uploads/2021/06/Feuillet-A5-1-inscriptions-enfants-recto-verso.pdf" target="_blank" rel="noopener noreferrer">
+      <a href="{% static 'home/files/child_registration_2021.pdf' %}" target="_blank" rel="noopener noreferrer">
         Fiche inscription été 2021
       </a>
     </li>
     <li>
-      <a href="http://www.ccbastides47.com/wp-content/uploads/2019/10/Fiche_sanitaire_de_liaison_cle1c348b.pdf" target="_blank" rel="noopener noreferrer">
+      <a href="{% static 'home/files/medical_form.pdf' %}" target="_blank" rel="noopener noreferrer">
         Fiche sanitaire de liaison
       </a>
     </li>
