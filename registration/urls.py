@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.contrib.auth import views as auth_views
 from . import views
 from .forms import LegalGuardianForm
@@ -24,9 +24,13 @@ urlpatterns = [
     path('signup', views.SignUp.as_view(), name='signup'),
     path('regfamily', views.RegFamily.as_view(), name='regfamily'),
     path('myaccount', views.ManageAccount.as_view(), name='myaccount'),
-    path('regchild_step1', views.RegChild.as_view(), name='regchild_step1'),
-    path(
-        'regchild_step2',
+    re_path(
+        '^regchild_step1\/?(?P<child_id>\d+)?\/?',
+        views.RegChild.as_view(),
+        name='regchild_step1'
+    ),
+    re_path(
+        '^regchild_step2\/?(?P<child_id>\d+)?\/?',
         views.RegChild.as_view(
             form_class=LegalGuardianForm,
             session_key='lg1',
@@ -35,8 +39,8 @@ urlpatterns = [
         ),
         name='regchild_step2'
     ),
-    path(
-        'regchild_step3',
+    re_path(
+        '^regchild_step3\/?(?P<child_id>\d+)?\/?',
         views.RegChild.as_view(
             form_class=LegalGuardianForm,
             session_key='lg2',
@@ -45,8 +49,10 @@ urlpatterns = [
         ),
         name='regchild_step3'
     ),
-    path('regchild_step4', views.RegChildFinal.as_view(),
-         name='regchild_step4'),
+    re_path(
+        '^regchild_step4\/?(?P<child_id>\d+)?\/?',
+        views.RegChildFinal.as_view(),
+        name='regchild_step4'),
     path('regperson', views.RegPerson.as_view(), name='regperson'),
     path('modfamily', views.RegFamily.as_view(
         modify=True

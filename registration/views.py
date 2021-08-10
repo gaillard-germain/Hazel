@@ -124,8 +124,19 @@ class RegChild(View):
     title = 'Enfant'
     step = 1
 
-    def post(self, request, *args, **kwargs):
-        if request.session.get(self.session_key):
+    def post(self, request, child_id=None, *args, **kwargs):
+        if child_id:#when user tries to modify registered child
+            if self.step == 1:
+                old_child = Child.objects.get(id=child_id)
+                data = model_to_dict(old_child)
+            elif self.step == 2:
+                old_lg1 = Adult.objects.get(child_lg1=child_id)
+                data = model_to_dict(old_lg1)
+            elif self.step == 3:
+                old_lg2 = Adult.objects.get(child_lg2=child_id)
+                data = model_to_dict(old_lg2)
+
+        elif request.session.get(self.session_key):
             data = request.session[self.session_key]
         else:
             data = None
@@ -136,20 +147,23 @@ class RegChild(View):
             birth_date = form.cleaned_data.get('birth_date')
             if birth_date:
                 form.cleaned_data['birth_date'] = date.isoformat(birth_date)
+                #transform birth_date to isoformat to serialize it
 
             request.session[self.session_key] = form.cleaned_data
-            return redirect('registration:regchild_step{}'.format(self.step+1))
+            return redirect('registration:regchild_step{}'.format(self.step+1),
+                            child_id)
 
         context = {
             'form': form,
             'h2': self.title,
-            'step': self.step
+            'step': self.step,
+            'child_id': child_id
         }
 
         return render(request, self.template_name, context)
 
-    def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+    def get(self, request, child_id=None, *args, **kwargs):
+        return self.post(request, child_id, *args, **kwargs)
 
 
 class RegChildFinal(RegChild):
@@ -159,9 +173,14 @@ class RegChildFinal(RegChild):
     title = 'Autorisations parentales'
     step = 4
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, child_id=None, *args, **kwargs):
+        if child_id:#when user tries to modify registered child
+            old_child = Child.objects.get(id=child_id)
+            data = model_to_dict(old_child)
+        else:
+            data = None
 
-        form = self.form_class(request.POST or None)
+        form = self.form_class(request.POST or None, initial=data)
 
         if form.is_valid():
             family = Family.objects.get(user=request.user.id)
@@ -179,7 +198,8 @@ class RegChildFinal(RegChild):
         context = {
             'form': form,
             'h2': self.title,
-            'step': self.step
+            'step': self.step,
+            'child_id': child_id
         }
 
         return render(request, self.template_name, context)

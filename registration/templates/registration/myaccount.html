@@ -58,6 +58,7 @@
         <tr>
           <td>{{ child.firstname }} {{ child.lastname }}</td>
           <td><a class="table-button" href="{% url 'booking:calendar' child_id=child.id %}"><i class="far fa-calendar-plus"></i> Réservation</a></td>
+          <td><a class="table-button" href="{% url 'registration:regchild_step1' child_id=child.id %}"><i class="fas fa-pencil-alt"></i> Modifier</a></td>
           <td><button class="table-button child" type="button" onclick="deleteThis(this)" value="{{ child.id }}"><i class="far fa-trash-alt"></i> Suppression</button></td>
         </tr>
         {% endfor %}

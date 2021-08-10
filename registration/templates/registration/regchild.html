@@ -2,7 +2,11 @@
 {% load static %}
   {% block content %}
   <div class="bg-fixed">
+    {% if child_id %}
+    <h1 class="section-title top-offset">MODIFIER LES INFORMATIONS DE L'ENFANT</h1>
+    {% else %}
     <h1 class="section-title top-offset">INSCRIRE UN ENFANT</h1>
+    {% endif %}
     <h1 class="section-title">-Etape {{ step }}-</h1>
     <div class="form-box">
       <form method="post">
@@ -10,8 +14,12 @@
         <h2>{{ h2 }}</h2>
         {% include 'registration/form_snippet.html' with form=form %}
         <hr class="separator">
-        {% if step > 1 %}
-        <a class="clean-a form-button" href="regchild_step{{ step|add:'-1' }}"><i class="fas fa-arrow-left"></i> Précédent</a>
+        {% if step == 2 %}
+        <a class="clean-a form-button" href="{% url 'registration:regchild_step1' child_id=child_id %}"><i class="fas fa-arrow-left"></i> Précédent</a>
+        {% elif step == 3 %}
+        <a class="clean-a form-button" href="{% url 'registration:regchild_step2' child_id=child_id %}"><i class="fas fa-arrow-left"></i> Précédent</a>
+        {% elif step == 4 %}
+        <a class="clean-a form-button" href="{% url 'registration:regchild_step3' child_id=child_id %}"><i class="fas fa-arrow-left"></i> Précédent</a>
         {% endif %}
         {% if step > 0 and step < 4 %}
         <button class="form-button" type="submit">Suivant <i class="fas fa-arrow-right"></i></button>
