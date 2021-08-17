@@ -101,7 +101,9 @@ class BookingAdmin(admin.ModelAdmin):
 
     def export_as_csv(self, request, queryset):
         """ Adds the action to export a queryset as a csv file """
-        
+
+        queryset = queryset.exclude(validated=False)
+
         month = [_date(query.slot.day, 'F') for query in queryset]
         month = '-'.join(set(month))
         year = [_date(query.slot.day, 'Y') for query in queryset]
@@ -120,8 +122,6 @@ class BookingAdmin(admin.ModelAdmin):
         writer.writerow([])
         writer.writerow(['Redevable', 'Consommateur', 'QF', 'Journée',
                          'Demi-journée'])
-
-        queryset = queryset.exclude(validated=False)
 
         mydict = {}
         for obj in queryset:
