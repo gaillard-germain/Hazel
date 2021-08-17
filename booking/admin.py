@@ -1,9 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
-from django.utils.datastructures import MultiValueDictKeyError
 from django.template.defaultfilters import date as _date
 import csv
-import calendar
 from .models import Period, Booking, Slot, Activity
 from registration.models import Child, Category
 
@@ -108,9 +106,6 @@ class BookingAdmin(admin.ModelAdmin):
         month = '-'.join(set(month))
         year = [_date(query.slot.day, 'Y') for query in queryset]
         year = '-'.join(set(year))
-
-        meta = self.model._meta
-        fields = [field for field in meta.fields]
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = (

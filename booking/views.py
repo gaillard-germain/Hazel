@@ -87,7 +87,13 @@ class Calendar(View):
 
             calendars = {}
             for period in periods:
-                calendars[period.name] = period.make_calendar(child)
+                wednesday = []
+                if period.name == 'Périscolaire':
+                    all = Period.objects.all().exclude(name=period.name)
+                    for obj in all:
+                        wednesday += obj.get_days(2)
+
+                calendars[period.name] = period.make_calendar(child, wednesday)
 
             context = {
                 'child': child,

@@ -23,7 +23,18 @@ class Period(models.Model):
     def __str__(self):
         return self.name
 
-    def make_calendar(self, child):
+    def get_days(self, weekday):
+        """ return a list of all given weekday in the period
+            (0=monday...6=sunday)"""
+        all_days = []
+        current = self.start_date + timedelta(days=1)
+        while current != self.end_date:
+            if current.weekday() == weekday:
+                all_days.append(current)
+            current += timedelta(days=1)
+        return all_days
+
+    def make_calendar(self, child, wednesday=[]):
         """ Returns a dict {month: {weekday: [date]}} of the period"""
 
         calendar = {}
@@ -39,7 +50,8 @@ class Period(models.Model):
             month = _date(current, 'F Y')
             weekday = _date(current, 'D')
 
-            if current.weekday() not in excluded and current > date.today():
+            if (current.weekday() not in excluded and
+                    current > date.today() and current not in wednesday):
                 if month not in calendar:
                     calendar[month] = {}
 

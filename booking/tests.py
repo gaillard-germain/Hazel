@@ -51,55 +51,7 @@ class CalendarPageTestCase(TestCase):
         self.user = User.objects.create_user(self.username, self.email,
                                              self.password)
         self.birth_date = date.fromisoformat('2012-01-01')
-
-    def test_calendar_page_returns_200(self):
-        family = Family.objects.create(user=self.user)
-        child = Child.objects.create(family=family, birth_date=self.birth_date)
-        self.client.login(username=self.username, password=self.password)
-
-        response = self.client.get(reverse('booking:calendar',
-                                   args=(str(child.id))))
-        self.assertEqual(response.status_code, 200)
-
-    def test_calendar_page_redirect_if_not_logged(self):
-        family = Family.objects.create(user=self.user)
-        child = Child.objects.create(family=family, birth_date=self.birth_date)
-        response = self.client.get(reverse('booking:calendar',
-                                   args=(str(child.id))))
-        self.assertEqual(response.status_code, 302)
-
-    def test_calendar_page_redirect_if_no_family(self):
-        self.client.login(username=self.username, password=self.password)
-        response = self.client.get(reverse('booking:calendar',
-                                   args=("1")))
-        self.assertEqual(response.status_code, 302)
-
-    def test_calendar_page_returns_404_if_no_child(self):
-        self.client.login(username=self.username, password=self.password)
-        Family.objects.create(user=self.user)
-        response = self.client.get(reverse('booking:calendar',
-                                   args=("1")))
-        self.assertEqual(response.status_code, 404)
-
-    def test_calendar_page_returns_404_if_not_familys_child(self):
-        self.client.login(username=self.username, password=self.password)
-        family = Family.objects.create(user=self.user)
-        Child.objects.create(family=family, birth_date=self.birth_date)
-        response = self.client.get(reverse('booking:calendar',
-                                   args=("2")))
-        self.assertEqual(response.status_code, 404)
-
-
-class MakeCalendarTestCase(TestCase):
-
-    def setUp(self):
-        self.username = 'Fake-User'
-        self.email = 'fake.user@foo.bar'
-        self.password = 'F4K3u53r'
-        self.user = User.objects.create_user(self.username, self.email,
-                                             self.password)
         self.family = Family.objects.create(user=self.user)
-        self.birth_date = date.fromisoformat('2012-01-01')
         self.child = Child.objects.create(family=self.family,
                                           birth_date=self.birth_date)
         self.monday = date.today()
@@ -114,31 +66,75 @@ class MakeCalendarTestCase(TestCase):
             start_date=self.monday,
             end_date=self.monday + timedelta(weeks=1)
         )
+        self.period2 = Period.objects.create(
+            name='Périscolaire',
+            start_date=self.monday,
+            end_date=self.monday + timedelta(weeks=2)
+        )
+        self.client.login(username=self.username, password=self.password)
+
+    def test_calendar_page_returns_200(self):
+        response = self.client.get(reverse('booking:calendar',
+                                   args=(str(self.child.id))))
+        self.assertEqual(response.status_code, 200)
+
+    def test_calendar_page_redirect_if_not_logged(self):
+        self.client.logout()
+        response = self.client.get(reverse('booking:calendar',
+                                   args=(str(self.child.id))))
+        self.assertEqual(response.status_code, 302)
+
+    def test_calendar_page_redirect_if_no_family(self):
+        Family.objects.all().delete()
+        response = self.client.get(reverse('booking:calendar',
+                                   args=("1")))
+        self.assertEqual(response.status_code, 302)
+
+    def test_calendar_page_returns_404_if_no_child(self):
+        response = self.client.get(reverse('booking:calendar',
+                                   args=("1")))
+        self.assertEqual(response.status_code, 404)
+
+    def test_calendar_page_returns_404_if_not_familys_child(self):
+        response = self.client.get(reverse('booking:calendar',
+                                   args=("2")))
+        self.assertEqual(response.status_code, 404)
 
     def test_calendar_dict_contains_booking(self):
         slot = Slot.objects.create(day=self.t1)
         booking = Booking.objects.create(slot=slot, child=self.child)
-        calendar = self.period.make_calendar(self.child)
-
         month = _date(self.t1, 'F Y')
         weekday = _date(self.t1, 'D')
         day = self.t1
-        self.assertEqual(calendar[month][weekday][day], booking)
+        response = self.client.get(reverse('booking:calendar',
+                                   args=(str(self.child.id))))
+        calendar = response.context['calendars']['Fake Period']
+        self.assertEqual(
+            calendar[month][weekday][day], booking
+        )
 
     def test_calendar_dict_contains_none(self):
-        calendar = self.period.make_calendar(self.child)
         month = _date(self.t1, 'F Y')
         weekday = _date(self.t1, 'D')
         day = self.t1
-        self.assertEqual(calendar[month][weekday][day], None)
+        response = self.client.get(reverse('booking:calendar',
+                                   args=(str(self.child.id))))
+        calendar = response.context['calendars']['Fake Period']
+        self.assertEqual(
+            calendar[month][weekday][day], None
+        )
 
     def test_calendar_dict_contains_full(self):
         Slot.objects.create(day=self.t1, is_full=True)
-        calendar = self.period.make_calendar(self.child)
         month = _date(self.t1, 'F Y')
         weekday = _date(self.t1, 'D')
         day = self.t1
-        self.assertEqual(calendar[month][weekday][day], 'full')
+        response = self.client.get(reverse('booking:calendar',
+                                   args=(str(self.child.id))))
+        calendar = response.context['calendars']['Fake Period']
+        self.assertEqual(
+            calendar[month][weekday][day], 'full'
+        )
 
 
 class ModifyViewTestCase(TestCase):
