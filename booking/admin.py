@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
+from django.utils.datastructures import MultiValueDictKeyError
+from django.template.defaultfilters import date as _date
 import csv
 import calendar
 from .models import Period, Booking, Slot, Activity
@@ -99,9 +101,11 @@ class BookingAdmin(admin.ModelAdmin):
 
     def export_as_csv(self, request, queryset):
         """ Adds the action to export a queryset as a csv file """
-
-        month = calendar.month_name[int(request.GET['slot__day__month'])]
-        year = request.GET['slot__day__year']
+        
+        month = [_date(query.slot.day, 'F') for query in queryset]
+        month = '-'.join(set(month))
+        year = [_date(query.slot.day, 'Y') for query in queryset]
+        year = '-'.join(set(year))
 
         meta = self.model._meta
         fields = [field for field in meta.fields]
