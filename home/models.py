@@ -1,6 +1,4 @@
 from django.db import models
-from django.template.defaultfilters import date as _date
-from datetime import date
 
 
 class Price(models.Model):

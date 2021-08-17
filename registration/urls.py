@@ -25,12 +25,12 @@ urlpatterns = [
     path('regfamily', views.RegFamily.as_view(), name='regfamily'),
     path('myaccount', views.ManageAccount.as_view(), name='myaccount'),
     re_path(
-        '^regchild_step1\/?(?P<child_id>\d+)?\/?',
+        r'^regchild_step1\/?(?P<child_id>\d+)?\/?',
         views.RegChild.as_view(),
         name='regchild_step1'
     ),
     re_path(
-        '^regchild_step2\/?(?P<child_id>\d+)?\/?',
+        r'^regchild_step2\/?(?P<child_id>\d+)?\/?',
         views.RegChild.as_view(
             form_class=LegalGuardianForm,
             session_key='lg1',
@@ -40,7 +40,7 @@ urlpatterns = [
         name='regchild_step2'
     ),
     re_path(
-        '^regchild_step3\/?(?P<child_id>\d+)?\/?',
+        r'^regchild_step3\/?(?P<child_id>\d+)?\/?',
         views.RegChild.as_view(
             form_class=LegalGuardianForm,
             session_key='lg2',
@@ -50,7 +50,7 @@ urlpatterns = [
         name='regchild_step3'
     ),
     re_path(
-        '^regchild_step4\/?(?P<child_id>\d+)?\/?',
+        r'^regchild_step4\/?(?P<child_id>\d+)?\/?',
         views.RegChildFinal.as_view(),
         name='regchild_step4'),
     path('regperson', views.RegPerson.as_view(), name='regperson'),

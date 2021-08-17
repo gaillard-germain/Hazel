@@ -7,7 +7,6 @@ from django.forms.models import model_to_dict
 from .forms import (SignUpForm, FamilyForm, ChildForm, AuthorizedPersonForm,
                     ParentalAuthorizationForm, DoctorForm)
 from .models import User, Family, Child, Adult
-from booking.models import Booking, Slot
 from datetime import date
 
 
@@ -125,7 +124,7 @@ class RegChild(View):
     step = 1
 
     def post(self, request, child_id=None, *args, **kwargs):
-        if child_id:#when user tries to modify registered child
+        if child_id:  # when user tries to modify registered child
             if self.step == 1:
                 old_child = Child.objects.get(id=child_id)
                 data = model_to_dict(old_child)
@@ -147,7 +146,7 @@ class RegChild(View):
             birth_date = form.cleaned_data.get('birth_date')
             if birth_date:
                 form.cleaned_data['birth_date'] = date.isoformat(birth_date)
-                #transform birth_date to isoformat to serialize it
+                # transform birth_date to isoformat to serialize it
 
             request.session[self.session_key] = form.cleaned_data
             return redirect('registration:regchild_step{}'.format(self.step+1),
@@ -174,7 +173,7 @@ class RegChildFinal(RegChild):
     step = 4
 
     def post(self, request, child_id=None, *args, **kwargs):
-        if child_id:#when user tries to modify registered child
+        if child_id:  # when user tries to modify registered child
             old_child = Child.objects.get(id=child_id)
             data = model_to_dict(old_child)
         else:
