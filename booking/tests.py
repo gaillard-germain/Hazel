@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.template.defaultfilters import date as _date
+from django.core.management import call_command
+from unittest.mock import patch
 from registration.models import User, Family, Child
 from .models import Period, Slot, Booking
 from datetime import date, timedelta
@@ -183,3 +185,40 @@ class ModifyViewTestCase(TestCase):
         new_slots = slots.count()
         self.assertEqual(new_booking, old_booking + 1)
         self.assertEqual(new_slots, old_slots + 1)
+
+
+class MockResponse:
+
+    def __init__(self):
+        self.status_code = 200
+
+    def json(self):
+        return {
+            "records": [
+                {
+                    "datasetid": "fr-en-calendrier-scolaire",
+                    "recordid": "23751d4d9f293baf7f432ef67c0ee28e1e216d4e",
+                    "fields": {
+                        "description": "Vacances de Noël",
+                        "end_date": "2022-01-03T00:00:00+01:00",
+                        "zones": "Zone A",
+                        "annee_scolaire": "2021-2022",
+                        "location": "Bordeaux",
+                        "start_date": "2021-12-18T00:00:00+01:00",
+                        "population": "-"
+                    },
+                    "record_timestamp": "2021-07-20T16:48:46.289000+02:00"
+                }]
+        }
+
+
+class GetHolidaysCommandTestCase(TestCase):
+
+    @patch('requests.get', return_value=MockResponse())
+    def test_get_holidays_add_periods(self, mocked):
+        old_period = Period.objects.count()
+        args = []
+        opts = {}
+        call_command('get_holidays', *args, **opts)
+        new_period = Period.objects.count()
+        self.assertEqual(new_period, old_period+2)
