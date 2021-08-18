@@ -39,6 +39,7 @@ If you want to try it on localhost.
   ```
 - You may populate the periods table with a custom command `./manage.py get_holidays`.  
 *the script for this command is in hazel/booking/management/commands/get_holidays.py, you can modify it as you wish.*
+- In the dumps directory you will find the dumps of the defaults Price and Category tables. Use `./manage.py loaddata <json file to load>` to load them.
 - To launch the server `./manage.py runserver`.
 - Open your web browser at http://127.0.0.1:8000/
 ### Tests
