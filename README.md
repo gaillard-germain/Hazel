@@ -42,4 +42,7 @@ If you want to try it on localhost.
 - To launch the server `./manage.py runserver`.
 - Open your web browser at http://127.0.0.1:8000/
 ### Tests
-Some tests are available: run `./manage.py test` to perform them.
+Some tests are available: run `./manage.py test` to perform them.  
+Note: You'll need [mozilla/geckodriver](https://github.com/mozilla/geckodriver/releases/) to perform Selenium test. Put it in the directory that is mentioned in the PATH environment variable. (`echo $PATH` on linux to display a list of all directories that are registered in the PATH variable.)
+## Online
+You can try it online at the following address: [128.199.53.172](http://128.199.53.172)
