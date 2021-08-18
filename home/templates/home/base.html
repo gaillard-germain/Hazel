@@ -23,7 +23,7 @@
         <a href="/#contact">Contact</a>
         {% if user.is_authenticated %}
         <div class="dropdown">
-          <button onclick="dropDown()" class="dropbtn">
+          <button id="dropdown-button" onclick="dropDown()" class="dropbtn">
             <i class="far fa-user-circle fa-3x"></i>
             <span>{{ user.username }}</span>
           </button>
@@ -34,13 +34,13 @@
         </div>
         {% else %}
         <div class="dropdown">
-          <button onclick="dropDown()" class="dropbtn">
+          <button id="dropdown-button" onclick="dropDown()" class="dropbtn">
             <i class="far fa-user-circle fa-3x"></i>
             <span>Connexion</span>
           </button>
           <div id="account" class="dropdown-content">
             <a href="{% url 'registration:login' %}">Se connecter</a>
-            <a href="{% url 'registration:signup' %}">Créer un compte</a>
+            <a id="create-account" href="{% url 'registration:signup' %}">Créer un compte</a>
           </div>
         </div>
 

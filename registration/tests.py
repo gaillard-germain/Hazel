@@ -3,6 +3,15 @@ from django.urls import reverse
 from .models import User, Family, Adult, Child
 from datetime import date
 
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+
+from selenium import webdriver
+from selenium.webdriver import FirefoxOptions
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+from webdriver_manager.firefox import GeckoDriverManager
+
 
 class SignUpPageTestCase(TestCase):
 
@@ -239,3 +248,48 @@ class DeleteThisTestCase(TestCase):
             {'this_kind': 'adult', 'this_id': '0'}
         )
         self.assertEqual(response.status_code, 404)
+
+
+class FunctionalTestCase(StaticLiveServerTestCase):
+
+    def setUp(self):
+        opts = FirefoxOptions()
+        opts.add_argument("--headless")
+        self.driver = webdriver.Firefox(
+            executable_path=GeckoDriverManager().install(),
+            firefox_options=opts
+        )
+        self.wait = WebDriverWait(self.driver, 1000)
+        self.addCleanup(self.driver.quit)
+
+    def test_create_account(self):
+        self.driver.get(self.live_server_url)
+        self.assertIn('Hazel', self.driver.title)
+
+        dropdown = self.driver.find_element_by_id('dropdown-button')
+        ActionChains(self.driver).click(dropdown).perform()
+        self.wait.until(lambda driver:
+                        self.driver.find_element_by_id("create-account"))
+        create_account = self.driver.find_element_by_id('create-account')
+        ActionChains(self.driver).click(create_account).perform()
+        self.wait.until(lambda driver:
+                        self.driver.find_element_by_id("submit-account"))
+
+        assert self.driver.current_url.endswith('/registration/signup')
+
+        username = self.driver.find_element_by_id('id_username')
+        email = self.driver.find_element_by_id('id_email')
+        password1 = self.driver.find_element_by_id('id_password1')
+        password2 = self.driver.find_element_by_id('id_password2')
+        submit = self.driver.find_element_by_id('submit-account')
+
+        username.send_keys('fake-user')
+        email.send_keys('fake@foo.bar')
+        password1.send_keys('13tm31n21')
+        password2.send_keys('13tm31n21')
+        submit.send_keys(Keys.RETURN)
+
+        self.wait.until(lambda driver:
+                        self.driver.find_element_by_id("info"))
+
+        assert self.driver.current_url == '{}/'.format(self.live_server_url)
