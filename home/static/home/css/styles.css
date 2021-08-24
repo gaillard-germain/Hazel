@@ -632,6 +632,15 @@ section a:hover {
   font-size: 2em;
 }
 
+#booking-msg {
+  margin: 0 auto;
+  padding: 0.5em;
+  width: 100%;
+  font-size: 1em;
+  color: #5fab3d;
+  text-align: center;
+}
+
 footer {
   text-align: center;
   background-color: lightgrey;

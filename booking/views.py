@@ -58,6 +58,15 @@ class Modify(View):
         booking.update_booking(command)
         slot.update_slot()
 
+        if command == 'cancel':
+            msg = 'La réservation du {} pour {} a été annulée.'.format(
+                slot, child.firstname
+            )
+        else:
+            msg = 'La réservation du {} pour {} a été enregistrée.'.format(
+                slot, child.firstname
+            )
+        response['msg'] = msg
         return JsonResponse(response)
 
 

@@ -25,6 +25,10 @@ $.fn.bookaDay = function(command, day, slot) {
       $(slot).removeClass("half-day full-day");
     }
     if (response['msg']) {
+      $('#booking-msg').text(response['msg'])
+      if ($('#booking-msg').hasClass('hidden')) {
+        $('#booking-msg').toggleClass('hidden')
+      }
       console.log(response['msg']);
     }
   });
