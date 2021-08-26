@@ -26,6 +26,10 @@ If you want to try it on localhost.
   ```
   SECRET_KEY = <your secret key>
 
+  DEBUG = True
+
+  ALLOWED_HOSTS = ['127.0.0.1']
+
   DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
