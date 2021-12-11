@@ -1,5 +1,8 @@
 # Hazel
 Hazel is the result of my final project as part of my OpenClassRooms training as a Python developer.
+
+![hazel screenshot](hazel.png "hazel screenshot")
+
 ## About
 It is a django web application that I created for the recreation center in my town. It allows families to register their children directly on-line and the director (as an admin user) can display the bookings and access to the children's infos. Also, he can update some informations about the facility.
 ## Sources
